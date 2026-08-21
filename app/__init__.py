@@ -1,12 +1,15 @@
-class App:
-    """
-**App initializer**
+from PyQt6.QtWidgets import QApplication
+from app.ui.windows.mainwindow import MainWindow
 
-Import all the modules and initialize the application
-    """
+class App:
+    """**App Class**"""
     
     def __init__(self) -> None:
-        """
-        **App Constructor**
-        """
-        pass
+        """Initialize the application, including main window"""
+        self.app = QApplication([])
+        self.mainwindow = MainWindow()
+    
+    def run(self) -> int:
+        """Executes the application"""
+        self.mainwindow.show()
+        return self.app.exec()
