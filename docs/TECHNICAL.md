@@ -3,7 +3,7 @@
 ## 📌 Project
 Attendance management software for ANVIZ biometric devices.
 
-## WorkFlow and UI/UX
+## 🚀 WorkFlow and UI/UX
 This topic includes the designing of the work flow of the application, including pages and activities in the applications
 
 **Launcher Page:**
@@ -84,10 +84,39 @@ This topic includes the designing of the work flow of the application, including
 - Exception Page
 - Settings Page
 
+## 📁 File Structure
+```
+LICENSE
+main.py
+README.md
+requirements.txt
+app/
+	__init__.py
+	settings.py
+	ui/
+		activities/
+			attendanceactivity.py
+			departmentactivity.py
+			deviceactivity.py
+			exceptionactivity.py
+			launcheractivity.py
+			mainactivity.py
+			reportactivity.py
+			settingsactivity.py
+			useractivity.py
+		components/
+			aside.py
+			menubar.py
+		windows/
+			mainwindow.py
+docs/
+	CONTRIBUTING.md
+	TECHNICAL.md
+```
+
 ## Time Line
 - 2026-08-20 - UI/UX and System Design
+- 2026-08-21 - Initialized File strucutre
 
 ## 📞 Contact
 moeez.raza.dev@gmail.com
-
-**Updated:** 2026-08-20
