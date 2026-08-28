@@ -117,8 +117,7 @@ docs/
 
 ## Time Line
 - 2026-08-20 - UI/UX and System Design
-- 2026-08-21 - Initialized File strucutre
-- 2026-08-22 - Created the main window
+- 2026-08-21 - Initialized File strucutre and main window
 
 ## 📞 Contact
 moeez.raza.dev@gmail.com
