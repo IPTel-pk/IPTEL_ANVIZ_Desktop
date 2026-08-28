@@ -25,7 +25,7 @@ class MainWindow(QMainWindow):
             menubar = QMenuBar(self)
             self.setMenuBar(menubar)
         MenuBar(menubar, self)
-        self._activity_widget = LauncherActivity(self)
+        self._activity_widget = LauncherActivity(parent=self, navigate=self.navigate)
         self.setCentralWidget(self._activity_widget)
     
     def _swap_activity(self, widget: QWidget) -> None:
@@ -35,25 +35,26 @@ class MainWindow(QMainWindow):
             self._activity_widget.deleteLater()
 
         self._activity_widget = widget
+        self.setCentralWidget(self._activity_widget)
     
     def navigate(self, target: str) -> None:
         """Navigation target requested from an activity's sidebar."""
         
-        if target == "main":
-            self._swap_activity(MainActivity(self, ))
-        elif target == "device":
-            self._swap_activity(DeviceActivity())
-        elif target == "users":
-            self._swap_activity(UsersActivity())
-        elif target == "department":
-            self._swap_activity(DepartmentActivity())
-        elif target == "report":
-            self._swap_activity(ReportActivity())
-        elif target == "attendance":
-            self._swap_activity(AttendanceActivity())
-        elif target == "exception":
-            self._swap_activity(ExceptionActivity())
-        elif target == "settings":
-            self._swap_activity(SettingsActivity())
+        if target == "Main":
+            self._swap_activity(MainActivity(parent=self, navigate=self.navigate))
+        elif target == "Device":
+            self._swap_activity(DeviceActivity(parent=self, navigate=self.navigate))
+        elif target == "Users":
+            self._swap_activity(UsersActivity(parent=self, navigate=self.navigate))
+        elif target == "Department":
+            self._swap_activity(DepartmentActivity(parent=self, navigate=self.navigate))
+        elif target == "Report":
+            self._swap_activity(ReportActivity(parent=self, navigate=self.navigate))
+        elif target == "Attendance":
+            self._swap_activity(AttendanceActivity(parent=self, navigate=self.navigate))
+        elif target == "Exception":
+            self._swap_activity(ExceptionActivity(parent=self, navigate=self.navigate))
+        elif target == "Settings":
+            self._swap_activity(SettingsActivity(parent=self, navigate=self.navigate))
         else:
-            self._swap_activity(LauncherActivity())
+            self._swap_activity(LauncherActivity(parent=self, navigate=self.navigate))

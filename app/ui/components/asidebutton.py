@@ -1,12 +1,14 @@
+from typing import Callable
 from PySide6.QtWidgets import QPushButton
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QSize
 import os
 
 class AsideButton(QPushButton):
-    def __init__(self, text:str, active:bool=False):
+    def __init__(self, text:str, navigate:Callable, active:bool=False):
         super().__init__(text)
         self.setFixedHeight(50)
+        self.clicked.connect(navigate)
         
         # Add icon before the text
         icon_path = f"assets/{text}.png"

@@ -14,7 +14,7 @@ class Activity(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        aside = Aside(self, activity)
+        aside = Aside(self, activity, navigate)
         layout.addWidget(aside)
 
         content = QWidget(self)
@@ -22,6 +22,6 @@ class Activity(QWidget):
         content.setStyleSheet("background-color: #f5f5f5;")
         content_layout = QHBoxLayout(content)
         content_layout.setContentsMargins(20, 20, 20, 20)
-        content_layout.addWidget(QLabel("Devices Activity (file is open)"))
+        content_layout.addWidget(QLabel(activity+" Activity Page"))
 
         layout.addWidget(content, 1)

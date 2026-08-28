@@ -1,3 +1,4 @@
+from typing import Callable
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QSizePolicy
@@ -6,7 +7,7 @@ from app.settings import ACTIVITIES
 
 class Aside(QWidget):
     """**Aside Menu Bar**"""
-    def __init__(self, parent, activity:str="") -> None:
+    def __init__(self, parent, activity:str, navigate:Callable) -> None:
         """Initialize the Side Bar Menu of the activity"""
         super().__init__(parent)
         self.setAutoFillBackground(True)
@@ -48,7 +49,11 @@ class Aside(QWidget):
         menu_layout.setContentsMargins(0, 0, 0, 0)
         menu_layout.setSpacing(0)
         for item in ACTIVITIES:
-            btn = AsideButton(item, item==activity)
+            btn = AsideButton(
+                text=item,
+                navigate=lambda checked=False, current=item: navigate(current),
+                active=item==activity,
+            )
             menu_layout.addWidget(btn)
 
         menu_layout.addWidget(QWidget(), 1)
