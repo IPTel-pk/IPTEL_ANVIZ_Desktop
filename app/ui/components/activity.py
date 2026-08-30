@@ -1,6 +1,7 @@
 from typing import Callable
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel
 from app.ui.components.aside import Aside
+from app.ui.components.header import Header
 
 class Activity(QWidget):
     """Basic structure of all the activities in the app."""
@@ -17,11 +18,22 @@ class Activity(QWidget):
         aside = Aside(self, activity, navigate)
         layout.addWidget(aside)
 
-        content = QWidget(self)
-        content.setAutoFillBackground(True)
-        content.setStyleSheet("background-color: #f5f5f5;")
-        content_layout = QHBoxLayout(content)
-        content_layout.setContentsMargins(20, 20, 20, 20)
-        content_layout.addWidget(QLabel(activity+" Activity Page"))
 
-        layout.addWidget(content, 1)
+        main = QWidget(self)
+        main.setAutoFillBackground(True)
+        main.setStyleSheet("background-color: #f5f5f5;")
+        main_layout = QVBoxLayout(main)
+        main_layout.setContentsMargins(30, 30, 30, 30)
+        main_layout.setSpacing(30)
+
+        header = Header(activity)
+        main_layout.addWidget(header)
+
+        self.content = QWidget(main)
+        self.content.setStyleSheet("""
+            background-color: #ffffff;
+            border: 1px solid #d9d9d9;
+        """)
+        main_layout.addWidget(self.content, 1)
+
+        layout.addWidget(main, 1)

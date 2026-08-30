@@ -1,14 +1,18 @@
 from typing import Callable
-from PySide6.QtWidgets import QPushButton
+from PySide6.QtWidgets import QPushButton, QHBoxLayout
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QSize
 import os
 
 class AsideButton(QPushButton):
+    """Basic Template for Buttons in the Aside Bar"""
     def __init__(self, text:str, navigate:Callable, active:bool=False):
-        super().__init__(text)
+        """Initializes a button for Aside Bar Menu"""
+        super().__init__(" "+text)
         self.setFixedHeight(50)
         self.clicked.connect(navigate)
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
         
         # Add icon before the text
         icon_path = f"assets/{text}.png"
@@ -16,6 +20,7 @@ class AsideButton(QPushButton):
             icon = QIcon(icon_path)
             self.setIcon(icon)
             self.setIconSize(QSize(24, 24))
+
         if active:
             self.setStyleSheet(self.styleSheet() + """
                 QPushButton {
