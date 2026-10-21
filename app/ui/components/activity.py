@@ -1,7 +1,9 @@
 from typing import Callable
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel
+from PySide6.QtCore import Qt
 from app.ui.components.aside import Aside
 from app.ui.components.header import Header
+from app.settings import VERSION
 
 class Activity(QWidget):
     """Basic structure of all the activities in the app."""
@@ -23,17 +25,21 @@ class Activity(QWidget):
         main.setAutoFillBackground(True)
         main.setStyleSheet("background-color: #f5f5f5;")
         main_layout = QVBoxLayout(main)
-        main_layout.setContentsMargins(30, 30, 30, 30)
-        main_layout.setSpacing(30)
+        main_layout.setContentsMargins(30, 30, 30, 0)
+        main_layout.setSpacing(0)
 
         header = Header(activity)
         main_layout.addWidget(header)
 
         self.content = QWidget(main)
-        self.content.setStyleSheet("""
-            background-color: #ffffff;
-            border: 1px solid #d9d9d9;
-        """)
+        # self.content.setStyleSheet("""
+        #     background-color: #ffffff;
+        #     border: 1px solid #d9d9d9;
+        # """)
         main_layout.addWidget(self.content, 1)
+
+        footer = QLabel(VERSION)
+        footer.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        main_layout.addWidget(footer)
 
         layout.addWidget(main, 1)
