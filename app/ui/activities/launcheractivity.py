@@ -1,102 +1,20 @@
 from typing import Callable
-
 from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QPixmap, QIcon
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
-    QSizePolicy,
     QVBoxLayout,
     QWidget,
     QTableWidget,
     QTableWidgetItem,
     QHeaderView,
 )
-
 from app.ui.components.activity import Activity
-
-
-class LargeButton(QPushButton):
-    """Custom button for the top section with icon, title, and subtitle."""
-
-    def __init__(self, title: str, subtitle: str, icon_path: str, parent=None):
-        super().__init__(parent)
-        self.setFixedHeight(130)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-
-        self.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #ffffff;
-                border: 1px solid #d9d9d9;
-            }
-            QPushButton:hover {
-                background-color: #f9f9f9;
-            }
-            """
-        )
-
-        layout = QVBoxLayout(self)
-        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.setSpacing(2)
-
-        icon_label = QLabel()
-        pixmap = QPixmap(icon_path)
-        if not pixmap.isNull():
-            pixmap = pixmap.scaled(
-                50,
-                50,
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation,
-            )
-            icon_label.setPixmap(pixmap)
-        icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        icon_label.setStyleSheet("border: none; background: transparent;")
-        layout.addWidget(icon_label)
-
-        title_label = QLabel(title)
-        title_label.setStyleSheet(
-            "font-size: 18px; font-weight: 500; border: none; background: transparent; color: #000000;"
-        )
-        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(title_label)
-
-        sub_label = QLabel(subtitle)
-        sub_label.setStyleSheet(
-            "font-size: 10px; color: #878787; border: none; background: transparent;"
-        )
-        sub_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(sub_label)
-
-
-class FileItemActions(QWidget):
-    """Widget containing action buttons (folder & trash) for the table rows."""
-    def __init__(self, button_size: int = 24, button_spacing: int = 10, parent=None):
-        super().__init__(parent)
-        self.setStyleSheet("border: none; background: transparent;")
-
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(button_spacing)
-        layout.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-
-        # Folder Button
-        self.btn1 = QPushButton()
-        self.btn1.setIcon(QIcon("assets/folder.png"))
-        self.btn1.setStyleSheet("border: none; background: transparent;")
-        self.btn1.setFixedSize(button_size, button_size)
-        self.btn1.setIconSize(QSize(button_size, button_size))
-        layout.addWidget(self.btn1)
-
-        # Trash Button
-        self.btn2 = QPushButton()
-        self.btn2.setIcon(QIcon("assets/trash.png"))
-        self.btn2.setStyleSheet("border: none; background: transparent;")
-        self.btn2.setFixedSize(button_size, button_size)
-        self.btn2.setIconSize(QSize(button_size, button_size))
-        layout.addWidget(self.btn2)
-
+from app.ui.components.largebutton import LargeButton
+from app.ui.components.fileitemaction import FileItemActions
+from data.launcher import files_data
 
 class LauncherActivity(Activity):
     """Launcher Page"""
@@ -200,16 +118,6 @@ class LauncherActivity(Activity):
         header.setSectionResizeMode(2, QHeaderView.ResizeMode.Fixed)            # Actions
         table.setColumnWidth(2, 100)                                            # Width for action buttons
         header.setDefaultAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
-
-        # Dummy Data
-        files_data = [
-            ("Company-2026.ipatt", "C:/users/name/Desktop/"),
-            ("Company-2025.ipatt", "D:/Backups/"),
-            ("Very_long_file_name_overflowing.ipatt", "/mnt/username/d/Local Disk/backup_folder/with_very_large/folder_path/overflowing/"),
-            ("Company-2024.ipatt", "/home/name/Documents/"),
-            ("Company-2023.ipatt", "C:/users/name/Desktop/"),
-            ("Company-2022.ipatt", "C:/users/name/Desktop/"),
-        ]
 
         table.setRowCount(len(files_data))
         for row, (name, path) in enumerate(files_data):

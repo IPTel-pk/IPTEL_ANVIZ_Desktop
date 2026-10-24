@@ -16,10 +16,9 @@ from PySide6.QtWidgets import (
     QWidget,
     QScrollArea, # Imported QScrollArea
 )
-
 from app.ui.components.activity import Activity
-from app.ui.activities.deviceactivity import FlowLayout
-
+from app.ui.components.flowlayout import FlowLayout
+from data.execption import data
 
 class ExceptionActivity(Activity):
     """**Exception Page**"""
@@ -214,33 +213,6 @@ class ExceptionActivity(Activity):
             """)
             layout.addWidget(le)
             return w
-
-        # Dummy Data
-        data = [
-            ("0001", "John Doe", "Operational"),
-            ("0001", "John Doe", "Operational"),
-            ("0002", "Sarah Smith", "Accounts"),
-            ("0002", "Sarah Smith", "Accounts"),
-            ("0003", "Mike Johnson", "Sales"),
-            ("0003", "Mike Johnson", "Sales"),
-            ("0004", "Emily Brown", "IT"),
-            ("0004", "Emily Brown", "IT"),
-            ("0005", "Ahmad", "Operational"),
-            ("0005", "Ahmad", "Operational"),
-            ("0006", "Ali", "Operational"),
-            ("0006", "Ali", "Operational"),
-            ("0007", "Shoaib", "Operational"),
-            ("0007", "Shoaib", "Operational"),
-            ("0007", "Shoaib", "Operational"),
-            ("0007", "Shoaib", "Operational"),
-            ("0007", "Shoaib", "Operational"),
-            ("0007", "Shoaib", "Operational"),
-            ("0007", "Shoaib", "Operational"),
-            ("0007", "Shoaib", "Operational"),
-            ("0007", "Shoaib", "Operational"),
-            ("0007", "Shoaib", "Operational"),
-            ("0007", "Shoaib", "Operational"),
-        ]
 
         table.setRowCount(len(data))
         for row, (uid, name, dept) in enumerate(data):

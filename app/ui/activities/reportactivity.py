@@ -14,10 +14,9 @@ from PySide6.QtWidgets import (
     QWidget,
     QScrollArea, # Added QScrollArea
 )
-
 from app.ui.components.activity import Activity
 from app.ui.activities.deviceactivity import FlowLayout
-
+from data.report import data
 
 class ReportActivity(Activity):
     """**Report Page**"""
@@ -178,24 +177,7 @@ class ReportActivity(Activity):
         table.setColumnWidth(2, 100) 
         table.setColumnWidth(3, 150) 
         table.setColumnWidth(4, 150) 
-        table.setColumnWidth(5, 120) 
-
-        data = [
-            ("2026-8-19", "9:00 AM", "0001", "John Doe", "Operational", "Check in"),
-            ("2026-8-19", "5:00 PM", "0001", "John Doe", "Operational", "Check out"),
-            ("2026-8-19", "9:00 AM", "0002", "Sarah Smith", "Accounts", "Check in"),
-            ("2026-8-19", "5:00 PM", "0002", "Sarah Smith", "Accounts", "Check out"),
-            ("2026-8-19", "9:00 AM", "0003", "Mike Johnson", "Sales", "Check in"),
-            ("2026-8-19", "5:00 PM", "0003", "Mike Johnson", "Sales", "Check out"),
-            ("2026-8-19", "9:00 AM", "0004", "Emily Brown", "IT", "Check in"),
-            ("2026-8-19", "5:00 PM", "0004", "Emily Brown", "IT", "Check out"),
-            ("2026-8-19", "9:00 AM", "0005", "Ahmad", "Operational", "Check in"),
-            ("2026-8-19", "5:00 PM", "0005", "Ahmad", "Operational", "Check out"),
-            ("2026-8-19", "9:00 AM", "0006", "Ali", "Operational", "Check in"),
-            ("2026-8-19", "5:00 PM", "0006", "Ali", "Operational", "Check out"),
-            ("2026-8-19", "9:00 AM", "0007", "Shoaib", "Operational", "Check in"),
-        ]
-
+        table.setColumnWidth(5, 120)
         table.setRowCount(len(data))
         for row, (date, time, uid, name, dept, status) in enumerate(data):
             table.setItem(row, 0, QTableWidgetItem(date))

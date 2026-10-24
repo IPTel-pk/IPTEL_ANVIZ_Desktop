@@ -1,0 +1,15 @@
+data = [
+    ("2026-8-19", "9:00 AM", "0001", "John Doe", "Operational", "Check in"),
+    ("2026-8-19", "5:00 PM", "0001", "John Doe", "Operational", "Check out"),
+    ("2026-8-19", "9:00 AM", "0002", "Sarah Smith", "Accounts", "Check in"),
+    ("2026-8-19", "5:00 PM", "0002", "Sarah Smith", "Accounts", "Check out"),
+    ("2026-8-19", "9:00 AM", "0003", "Mike Johnson", "Sales", "Check in"),
+    ("2026-8-19", "5:00 PM", "0003", "Mike Johnson", "Sales", "Check out"),
+    ("2026-8-19", "9:00 AM", "0004", "Emily Brown", "IT", "Check in"),
+    ("2026-8-19", "5:00 PM", "0004", "Emily Brown", "IT", "Check out"),
+    ("2026-8-19", "9:00 AM", "0005", "Ahmad", "Operational", "Check in"),
+    ("2026-8-19", "5:00 PM", "0005", "Ahmad", "Operational", "Check out"),
+    ("2026-8-19", "9:00 AM", "0006", "Ali", "Operational", "Check in"),
+    ("2026-8-19", "5:00 PM", "0006", "Ali", "Operational", "Check out"),
+    ("2026-8-19", "9:00 AM", "0007", "Shoaib", "Operational", "Check in"),
+]

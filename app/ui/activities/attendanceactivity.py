@@ -11,12 +11,11 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
     QSizePolicy,
-    QScrollArea, # Added QScrollArea
+    QScrollArea,
 )
-
 from app.ui.components.activity import Activity
-from app.ui.activities.deviceactivity import FlowLayout
-
+from app.ui.components.flowlayout import FlowLayout
+from data.attendance import data
 
 class AttendanceActivity(Activity):
     """**Attendance Page**"""
@@ -152,23 +151,6 @@ class AttendanceActivity(Activity):
         table.setColumnWidth(4, 100) # Check Out
         table.setColumnWidth(5, 120) # Total Hours
         table.setColumnWidth(6, 100) # Status
-
-        # Dummy Data
-        data = [
-            ("2026-8-19", "John Doe", "Operational", "9:00 AM", "5:00 PM", "8 hr", "Present"),
-            ("2026-8-20", "John Doe", "Operationalajshkioeufhnwf", "9:00 AM", "1:00 PM", "4 hr", "Half Day"),
-            ("2026-8-19", "Sarah Smith", "Accounts", "9:05 AM", "5:00 PM", "7 hr 55 min", "Present"),
-            ("2026-8-20", "Sarah Smith", "Accounts", "10:00 AM", "5:00 PM", "6 hr", "Late"),
-            ("2026-8-19", "Mike Johnson", "Sales", "9:00 AM", "5:00 PM", "8 hr", "Present"),
-            ("2026-8-20", "Mike Johnson", "Sales", "9:10 AM", "5:00 PM", "7 hr 50 min", "Present"),
-            ("2026-8-19", "Emily Brown", "IT", "9:00 AM", "5:00 PM", "8 hr", "Present"),
-            ("2026-8-20", "Emily Brown", "IT", "9:00 AM", "4:45 PM", "7 hr 45 min", "Present"),
-            ("2026-8-19", "Ahmad", "Operational", "9:00 AM", "5:00 PM", "8 hr", "Present"),
-            ("2026-8-20", "Ahmad", "Operational", "-", "-", "-", "Leave"),
-            ("2026-8-19", "Ali", "Operational", "9:00 AM", "5:00 PM", "8 hr", "Present"),
-            ("2026-8-20", "Ali", "Operational", "9:00 AM", "5:00 PM", "8 hr", "Present"),
-            ("2026-8-19", "Shoaib", "Operational", "-", "-", "-", "Absent"),
-        ]
 
         table.setRowCount(len(data))
         for row, (date, emp, dept, check_in, check_out, total, status) in enumerate(data):

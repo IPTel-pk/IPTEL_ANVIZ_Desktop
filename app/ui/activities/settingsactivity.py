@@ -8,13 +8,10 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QPushButton,
     QScrollArea,
-    QSizePolicy,
     QVBoxLayout,
     QWidget,
 )
-
 from app.ui.components.activity import Activity
-
 
 class SettingsActivity(Activity):
     """**Settings Page**"""
