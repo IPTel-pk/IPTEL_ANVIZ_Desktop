@@ -35,11 +35,11 @@ class UsersActivity(Activity):
         toolbar_layout = FlowLayout(toolbar_widget, margin=0, h_spacing=10, v_spacing=10)
         
         buttons = [
-            ("Add", "assets/icon.jpg"),
-            ("Edit", "assets/icon.jpg"),
-            ("Delete", "assets/icon.jpg"),
-            ("Download", "assets/icon.jpg"),
-            ("Upload", "assets/icon.jpg"),
+            ("Add", "assets/add.png"),
+            ("Edit", "assets/edit.png"),
+            ("Delete", "assets/delete.png"),
+            ("Download", "assets/download.png"),
+            ("Upload", "assets/upload.png"),
         ]
         
         for text, icon in buttons:

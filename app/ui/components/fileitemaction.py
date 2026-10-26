@@ -20,6 +20,7 @@ class FileItemActions(QWidget):
         # Folder Button
         self.btn1 = QPushButton()
         self.btn1.setIcon(QIcon("assets/folder.png"))
+        self.btn1.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn1.setStyleSheet("border: none; background: transparent;")
         self.btn1.setFixedSize(button_size, button_size)
         self.btn1.setIconSize(QSize(button_size, button_size))
@@ -28,6 +29,7 @@ class FileItemActions(QWidget):
         # Trash Button
         self.btn2 = QPushButton()
         self.btn2.setIcon(QIcon("assets/trash.png"))
+        self.btn2.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn2.setStyleSheet("border: none; background: transparent;")
         self.btn2.setFixedSize(button_size, button_size)
         self.btn2.setIconSize(QSize(button_size, button_size))

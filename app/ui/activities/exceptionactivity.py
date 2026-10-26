@@ -83,7 +83,7 @@ class ExceptionActivity(Activity):
         top_bar.addWidget(create_filter("Department", ["All Departments", "Operational", "Accounts", "Sales", "IT"]))
 
         # Helper for action buttons
-        def create_action_btn(text: str) -> QWidget:
+        def create_action_btn(text: str, icon="assets/icon.jpg") -> QWidget:
             container = QWidget()
             container.setStyleSheet("background: transparent;")
             layout = QVBoxLayout(container)
@@ -96,7 +96,7 @@ class ExceptionActivity(Activity):
             layout.addWidget(spacer)
 
             btn = QPushButton(text)
-            btn.setIcon(QIcon("assets/icon.jpg"))
+            btn.setIcon(QIcon(icon))
             btn.setIconSize(btn.iconSize().scaled(16, 16, Qt.AspectRatioMode.KeepAspectRatio))
             btn.setFixedHeight(32)
             btn.setStyleSheet("""
@@ -116,8 +116,8 @@ class ExceptionActivity(Activity):
             return container
 
         # Add Action Buttons
-        top_bar.addWidget(create_action_btn("Save"))
-        top_bar.addWidget(create_action_btn("Attendance"))
+        top_bar.addWidget(create_action_btn("Save", "assets/add.png"))
+        top_bar.addWidget(create_action_btn("Attendance", "assets/attendance-black.png"))
 
         main_layout.addWidget(top_bar_widget)
 

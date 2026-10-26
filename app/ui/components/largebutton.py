@@ -14,6 +14,7 @@ class LargeButton(QPushButton):
         super().__init__(parent)
         self.setFixedHeight(130)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setStyleSheet(
             """
             QPushButton {

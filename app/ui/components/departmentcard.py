@@ -50,7 +50,7 @@ class DepartmentCard(QWidget):
 
         # Icon Placeholder
         icon_label = QLabel()
-        pixmap = QPixmap("assets/icon.jpg")
+        pixmap = QPixmap("assets/group.png")
         if not pixmap.isNull():
             icon_label.setPixmap(pixmap.scaled(
                 45, 45, 

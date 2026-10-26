@@ -81,7 +81,7 @@ class ReportActivity(Activity):
         top_bar.addWidget(create_filter("Department", ["All Departments", "Operational", "Sales", "IT"]))
 
         # Helper function for action buttons
-        def create_action_btn(text: str) -> QWidget:
+        def create_action_btn(text: str, icon="assets/icon.jpg") -> QWidget:
             container = QWidget()
             container.setStyleSheet("background: transparent;")
             layout = QVBoxLayout(container)
@@ -93,7 +93,7 @@ class ReportActivity(Activity):
             layout.addWidget(spacer)
 
             btn = QPushButton(text)
-            btn.setIcon(QIcon("assets/icon.jpg"))
+            btn.setIcon(QIcon(icon))
             btn.setIconSize(btn.iconSize().scaled(16, 16, Qt.AspectRatioMode.KeepAspectRatio))
             btn.setFixedHeight(32)
             btn.setStyleSheet("""
@@ -112,8 +112,8 @@ class ReportActivity(Activity):
             layout.addWidget(btn)
             return container
 
-        top_bar.addWidget(create_action_btn("Exceptions"))
-        top_bar.addWidget(create_action_btn("Attendance"))
+        top_bar.addWidget(create_action_btn("Exceptions", "assets/edit.png"))
+        top_bar.addWidget(create_action_btn("Attendance", "assets/attendance-black.png"))
 
         main_layout.addWidget(top_bar_widget)
 

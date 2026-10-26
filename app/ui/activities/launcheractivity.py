@@ -1,10 +1,10 @@
 from typing import Callable
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize, QEvent
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
-    QPushButton,
+    QSizePolicy,
     QVBoxLayout,
     QWidget,
     QTableWidget,
@@ -69,20 +69,18 @@ class LauncherActivity(Activity):
         recent_files_layout.addWidget(header_label)
 
         # Table Setup
-        table = QTableWidget()
-        table.setColumnCount(3)
-        table.setHorizontalHeaderLabels(["File Name", "Path", "Actions"])
+        self.table = QTableWidget() # Made an instance variable for the event filter
+        self.table.setColumnCount(3)
+        self.table.setHorizontalHeaderLabels(["File Name", "Path", "Actions"])
         
         # Table Styling
-        table.setShowGrid(False)
-        table.setAlternatingRowColors(True)
-        table.verticalHeader().setVisible(False)
-        table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
-        table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
-        table.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
-        table.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        
-        table.setStyleSheet("""
+        self.table.setShowGrid(False)
+        self.table.setAlternatingRowColors(True)
+        self.table.verticalHeader().setVisible(False)
+        self.table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.table.setSelectionMode(QTableWidget.SelectionMode.NoSelection)
+        self.table.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.table.setStyleSheet("""
             QTableWidget {
                 background-color: #ffffff;
                 alternate-background-color: #f9f9f9;
@@ -95,50 +93,73 @@ class LauncherActivity(Activity):
                 font-size: 13px;
                 color: #000000;
             }
-            QTableWidget::item:selected {
-                background-color: #e8f0fe;
-                color: #000000;
-            }
-            QHeaderView::section {
-                background-color: #ffffff;
-                color: #878787;
-                font-weight: bold;
-                font-size: 12px;
-                border: none;
-                border-bottom: 1px solid #d9d9d9;
-                padding: 5px 10px;
-                text-align: left;
-            }
         """)
 
         # Column Resizing
-        header = table.horizontalHeader()
-        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents) # File Name
-        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)          # Path (takes available space)
-        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Fixed)            # Actions
-        table.setColumnWidth(2, 100)                                            # Width for action buttons
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Interactive)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Fixed)
+        self.table.setColumnWidth(2, 100)
         header.setDefaultAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
 
-        table.setRowCount(len(files_data))
+        self.table.setRowCount(len(files_data))
         for row, (name, path) in enumerate(files_data):
             # Name
             name_item = QTableWidgetItem(name)
             name_item.setToolTip(name)
-            table.setItem(row, 0, name_item)
+            self.table.setItem(row, 0, name_item)
 
             # Path
             path_item = QTableWidgetItem(path)
             path_item.setToolTip(path)
-            # Optional: path text can be greyed out
             path_item.setForeground(Qt.GlobalColor.gray)
-            table.setItem(row, 1, path_item)
+            self.table.setItem(row, 1, path_item)
 
             # Actions
             actions_widget = FileItemActions(button_size=20, button_spacing=15)
-            table.setCellWidget(row, 2, actions_widget)
+            self.table.setCellWidget(row, 2, actions_widget)
 
-        recent_files_layout.addWidget(table)
+        # --- Click and Cursor Logic ---
+        self.table.setMouseTracking(True) # Required for cellEntered to work without clicking
+        self.table.cellEntered.connect(self._on_cell_hover)
+        self.table.cellClicked.connect(self._on_cell_clicked)
+        self.table.cellDoubleClicked.connect(self._on_cell_double_clicked)
+        self.table.viewport().installEventFilter(self) # To reset cursor when leaving table
 
-        # Add the box to the main layout
+        recent_files_layout.addWidget(self.table)
         main_layout.addWidget(recent_files_box)
         main_layout.addStretch()
+
+    def _on_cell_hover(self, row: int, column: int) -> None:
+        """Change cursor to pointer for File Name (0) and Path (1) columns."""
+        if column in (0, 1):
+            self.table.viewport().setCursor(Qt.CursorShape.PointingHandCursor)
+        else:
+            self.table.viewport().setCursor(Qt.CursorShape.ArrowCursor)
+
+    def _on_cell_clicked(self, row: int, column: int) -> None:
+        """Handle single-click events (Optional)."""
+        if column in (0, 1):
+            item = self.table.item(row, 0)
+            if item is None:
+                return
+            file_name = item.text()
+            # TODO: Add your logic to open the file on single click
+            print(f"Clicked: {file_name}")
+
+    def _on_cell_double_clicked(self, row: int, column: int) -> None:
+        """Handle double-click events (Usually used to open files)."""
+        if column in (0, 1):
+            item = self.table.item(row, 0)
+            if item is None:
+                return
+            file_name = item.text()
+            # TODO: Add your logic to open the file on double click
+            print(f"Double-clicked: {file_name}")
+
+    def eventFilter(self, source, event) -> bool:
+        """Reset the cursor when the mouse leaves the table viewport."""
+        if source == self.table.viewport() and event.type() == QEvent.Type.Leave:
+            self.table.viewport().setCursor(Qt.CursorShape.ArrowCursor)
+        return super().eventFilter(source, event)

@@ -39,7 +39,7 @@ class UserCard(QWidget):
         # Card is 70px tall, 10px top margin + 10px bottom margin = 50px available. 
         # 90% of 70 is ~63px. We'll scale it to fit nicely.
         icon_label = QLabel()
-        pixmap = QPixmap("assets/icon.jpg")
+        pixmap = QPixmap("assets/user.png")
         if not pixmap.isNull():
             icon_label.setPixmap(pixmap.scaled(
                 50, 50, 
