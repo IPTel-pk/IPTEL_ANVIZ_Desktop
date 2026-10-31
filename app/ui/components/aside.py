@@ -3,7 +3,7 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QSizePolicy
 from app.ui.components.asidebutton import AsideButton
-from app.settings import ACTIVITIES
+from app.settings import ACTIVITIES, ACCENT_COLOR
 
 class Aside(QWidget):
     """**Aside Menu Bar**"""
@@ -11,7 +11,7 @@ class Aside(QWidget):
         """Initialize the Side Bar Menu of the activity"""
         super().__init__(parent)
         self.setAutoFillBackground(True)
-        self.setStyleSheet("background-color: #2c3e50;")
+        self.setStyleSheet(f"background-color: {ACCENT_COLOR};")
         self.setFixedWidth(260)
         self.content_layout = QVBoxLayout(self)
         self.content_layout.setContentsMargins(0, 0, 0, 0)

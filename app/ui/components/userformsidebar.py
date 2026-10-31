@@ -1,13 +1,13 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QComboBox,
     QLabel,
-    QLineEdit,
-    QPushButton,
     QScrollArea,
     QVBoxLayout,
     QWidget,
 )
+from app.ui.components.inputfield import InputField
+from app.ui.components.selectfield import SelectField
+from app.ui.components.primarybutton import PrimaryButton
 
 class UserFormSidebar(QWidget):
     """Right sidebar for adding/editing a user."""
@@ -23,18 +23,16 @@ class UserFormSidebar(QWidget):
             }
         """)
         
-        # Main layout for the Sidebar
+        # FIX: We need a main layout to force the scroll area to fill the widget
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setContentsMargins(0, 0, 0, 0) # Zero margins
         main_layout.setSpacing(0)
 
-        # Scroll Area
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
         scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scroll_area.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
 
-        # Content Widget
         content_widget = QWidget()
         content_widget.setStyleSheet("background-color: transparent;")
         
@@ -47,96 +45,50 @@ class UserFormSidebar(QWidget):
         title.setStyleSheet("font-size: 18px; font-weight: bold; border: none; background: transparent;")
         layout.addWidget(title)
 
-        # Helper function to create form fields
-        def add_field(label_text: str, placeholder: str) -> QLineEdit:
-            lbl = QLabel(label_text)
-            lbl.setStyleSheet("font-size: 12px; font-weight: bold; border: none; background: transparent;")
-            inp = QLineEdit()
-            inp.setPlaceholderText(placeholder)
-            inp.setFixedHeight(32)
-            inp.setStyleSheet("""
-                QLineEdit {
-                    border: 1px solid #d9d9d9;
-                    padding: 0 8px;
-                    font-size: 12px;
-                    background-color: #ffffff;
-                    color: #000000;
-                }
-                QLineEdit:focus {
-                    border: 1px solid #21679A;
-                }
-            """)
-            layout.addWidget(lbl)
-            layout.addWidget(inp)
-            return inp
-
         # Form Fields
-        # ID field is now writable and uses the default input styling
-        self.id_input = add_field("ID", "Auto-generated if empty")
+        self.id_input = InputField("ID", "Auto-generated if empty")
+        layout.addWidget(self.id_input)
         
-        self.name_input = add_field("Name", "Enter full name")
+        self.name_input = InputField("Name", "Enter full name")
+        layout.addWidget(self.name_input)
         
-        # Department ComboBox
-        dept_lbl = QLabel("Department")
-        dept_lbl.setStyleSheet("font-size: 12px; font-weight: bold; border: none; background: transparent;") # Restored styling
-        self.dept_combo = QComboBox()
-        self.dept_combo.addItems(["Select department", "Teachers", "Student", "Engineering", "HR"])
-        self.dept_combo.setFixedHeight(32)
-        self.dept_combo.setStyleSheet("""
-            QComboBox {
-                border: 1px solid #d9d9d9;
-                padding: 0 8px;
-                font-size: 12px;
-                background-color: #ffffff;
-                color: #000000;
-            }
-            QComboBox::drop-down { border: none; }
-        """)
-        layout.addWidget(dept_lbl)
+        self.dept_combo = SelectField("Department", ["Select department", "Teachers", "Student", "Engineering", "HR"])
         layout.addWidget(self.dept_combo)
 
-        self.password_input = add_field("Password", "Enter password")
-        self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
+        self.password_input = InputField("Password", "Enter password", hidden=True)
+        layout.addWidget(self.password_input)
 
-        self.rfid_input = add_field("RFID", "Scan or enter RFID tag")
+        self.rfid_input = InputField("RFID", "Scan or enter RFID tag")
+        layout.addWidget(self.rfid_input)
 
-        # Type ComboBox
-        type_lbl = QLabel("Type")
-        type_lbl.setStyleSheet("font-size: 12px; font-weight: bold; border: none; background: transparent;")
-        self.type_combo = QComboBox()
-        self.type_combo.addItems(["Select user type", "Normal", "Admin"])
-        self.type_combo.setFixedHeight(32)
-        self.type_combo.setStyleSheet("""
-            QComboBox {
-                border: 1px solid #d9d9d9;
-                padding: 0 8px;
-                font-size: 12px;
-                background-color: #ffffff;
-                color: #000000;
-            }
-            QComboBox::drop-down { border: none; }
-        """)
-        layout.addWidget(type_lbl)
+        self.type_combo = SelectField("Type", ["Select user type", "Normal", "Admin"])
         layout.addWidget(self.type_combo)
 
         layout.addStretch()
 
         # Save Button
-        save_btn = QPushButton("Save User")
-        save_btn.setFixedHeight(36)
-        save_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #21679A;
-                color: #ffffff;
-                border: none;
-                font-size: 13px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #1a527c;
-            }
-        """)
+        save_btn = PrimaryButton("Save User")
+        save_btn.clicked.connect(self._on_save_clicked)
         layout.addWidget(save_btn)
 
+        # Finalize layout
         scroll_area.setWidget(content_widget)
         main_layout.addWidget(scroll_area)
+
+    def _on_save_clicked(self):
+        """Placeholder for your save logic."""
+        # Example of how to get the data:
+        user_data = self.get_data()
+        print("Saving User:", user_data)
+        # Here you would typically emit a signal or call a database function
+
+    def get_data(self) -> dict:
+        """Helper method to extract all form data at once."""
+        return {
+            "id": self.id_input.text(),
+            "name": self.name_input.text(),
+            "department": self.dept_combo.current_text(),
+            "password": self.password_input.text(),
+            "rfid": self.rfid_input.text(),
+            "type": self.type_combo.current_text()
+        }

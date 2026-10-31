@@ -2,12 +2,13 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
-    QLineEdit,
-    QPushButton,
     QScrollArea,
     QVBoxLayout,
     QWidget,
 )
+
+from app.ui.components.inputfield import InputField
+from app.ui.components.primarybutton import PrimaryButton
 from app.ui.components.workingdayswidget import WorkingDaysWidget
 
 class DepartmentFormSidebar(QWidget):
@@ -48,60 +49,20 @@ class DepartmentFormSidebar(QWidget):
         title.setStyleSheet("font-size: 18px; font-weight: bold; border: none; background: transparent;")
         layout.addWidget(title)
 
-        # Helper function to create form fields
-        def add_field(label_text: str, placeholder: str) -> QLineEdit:
-            lbl = QLabel(label_text)
-            lbl.setStyleSheet("font-size: 12px; font-weight: bold; border: none; background: transparent;")
-            inp = QLineEdit()
-            inp.setPlaceholderText(placeholder)
-            inp.setFixedHeight(32)
-            inp.setStyleSheet("""
-                QLineEdit {
-                    border: 1px solid #d9d9d9;
-                    padding: 0 8px;
-                    font-size: 12px;
-                    background-color: #ffffff;
-                    color: #000000;
-                }
-                QLineEdit:focus {
-                    border: 1px solid #21679A;
-                }
-            """)
-            layout.addWidget(lbl)
-            layout.addWidget(inp)
-            return inp
-
-        # Form Fields
-        self.name_input = add_field("Department Name", "e.g. Accounts")
+        # --- Form Fields using Custom Components ---
         
-        # Start and Off Time Row
+        self.name_input = InputField("Department Name", "e.g. Accounts")
+        layout.addWidget(self.name_input)
+        
+        # Start and Off Time Row (Side-by-side)
         time_layout = QHBoxLayout()
         time_layout.setSpacing(10)
         
-        # Start Time
-        start_col = QVBoxLayout()
-        start_lbl = QLabel("Start Time")
-        start_lbl.setStyleSheet("font-size: 12px; font-weight: bold; border: none; background: transparent;")
-        self.start_input = QLineEdit()
-        self.start_input.setPlaceholderText("9:00 AM")
-        self.start_input.setFixedHeight(32)
-        self.start_input.setStyleSheet("QLineEdit { border: 1px solid #d9d9d9; padding: 0 8px; font-size: 12px; }")
-        start_col.addWidget(start_lbl)
-        start_col.addWidget(self.start_input)
-
-        # Off Time
-        off_col = QVBoxLayout()
-        off_lbl = QLabel("Off Time")
-        off_lbl.setStyleSheet("font-size: 12px; font-weight: bold; border: none; background: transparent;")
-        self.off_input = QLineEdit()
-        self.off_input.setPlaceholderText("5:00 PM")
-        self.off_input.setFixedHeight(32)
-        self.off_input.setStyleSheet("QLineEdit { border: 1px solid #d9d9d9; padding: 0 8px; font-size: 12px; }")
-        off_col.addWidget(off_lbl)
-        off_col.addWidget(self.off_input)
-
-        time_layout.addLayout(start_col)
-        time_layout.addLayout(off_col)
+        self.start_input = InputField("Start Time", "9:00 AM")
+        self.off_input = InputField("Off Time", "5:00 PM")
+        
+        time_layout.addWidget(self.start_input)
+        time_layout.addWidget(self.off_input)
         layout.addLayout(time_layout)
 
         # Working Days
@@ -111,25 +72,26 @@ class DepartmentFormSidebar(QWidget):
         
         self.working_days_widget = WorkingDaysWidget()
         layout.addWidget(self.working_days_widget)
-
         layout.addStretch()
 
         # Save Button
-        save_btn = QPushButton("Save Department")
-        save_btn.setFixedHeight(36)
-        save_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #21679A;
-                color: #ffffff;
-                border: none;
-                font-size: 13px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #1a527c;
-            }
-        """)
+        save_btn = PrimaryButton("Save Department")
+        save_btn.clicked.connect(self._on_save_clicked)
         layout.addWidget(save_btn)
 
         scroll_area.setWidget(content_widget)
         main_layout.addWidget(scroll_area)
+
+    def _on_save_clicked(self):
+        """Placeholder for your save logic."""
+        department_data = self.get_data()
+        print("Saving Department:", department_data)
+        # Here you would typically emit a signal or call a database function
+
+    def get_data(self) -> dict:
+        """Helper method to extract all form data at once."""
+        return {
+            "name": self.name_input.text(),
+            "start_time": self.start_input.text(),
+            "off_time": self.off_input.text(),
+        }

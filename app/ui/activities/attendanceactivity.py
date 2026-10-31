@@ -1,21 +1,18 @@
 from typing import Callable
-from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QComboBox,
-    QHBoxLayout,
-    QHeaderView,
-    QLabel,
-    QPushButton,
-    QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
     QSizePolicy,
-    QScrollArea,
 )
+
 from app.ui.components.activity import Activity
 from app.ui.components.flowlayout import FlowLayout
+from app.ui.components.selectfield import SelectField
+from app.ui.components.paginationfooter import PaginationFooter
+from app.ui.components.standardtable import StandardTable
 from data.attendance import data
+
 
 class AttendanceActivity(Activity):
     """**Attendance Page**"""
@@ -23,21 +20,13 @@ class AttendanceActivity(Activity):
         """Initialize the Attendance Page Activity"""
         super().__init__(parent=parent, activity="Attendance", navigate=navigate)
 
-        # 1. Main Scroll Area (Allows window to shrink vertically)
-        main_scroll = QScrollArea()
-        main_scroll.setWidgetResizable(True)
-        main_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        main_scroll.setStyleSheet("QScrollArea { border: none; background: transparent; }")
-
-        scroll_content = QWidget()
-        scroll_content.setStyleSheet("background: transparent;")
-        
-        main_layout = QVBoxLayout(scroll_content)
+        # 1. Create the main layout directly on self.content so the type is explicit for PySide6/Pylance
+        main_layout = QVBoxLayout(self.content)
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(20)
 
         # ==========================================
-        # 2. TOP FILTER BAR (RESPONSIVE)
+        # 2. TOP FILTER BAR
         # ==========================================
         top_bar_widget = QWidget()
         top_bar_widget.setStyleSheet("background: transparent;")
@@ -45,38 +34,11 @@ class AttendanceActivity(Activity):
         
         top_bar = FlowLayout(top_bar_widget, margin=0, h_spacing=15, v_spacing=15)
 
-        # Helper function to create the compact filter boxes
-        def create_filter(label_text: str, items: list) -> QWidget:
-            widget = QWidget()
-            widget.setStyleSheet("background: transparent;")
-            layout = QVBoxLayout(widget)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(4)
+        def create_filter(label_text: str, items: list) -> SelectField:
+            field = SelectField(label_text, items)
+            field.combo_box.setMinimumWidth(130)
+            return field
 
-            # Label above
-            lbl = QLabel(label_text)
-            lbl.setStyleSheet("font-size: 12px; font-weight: 500; color: #000000; border: none; background: transparent;")
-            layout.addWidget(lbl)
-
-            # Compact Select Box
-            combo = QComboBox()
-            combo.addItems(items)
-            combo.setFixedHeight(32)
-            combo.setMinimumWidth(130)
-            combo.setStyleSheet("""
-                QComboBox {
-                    border: 1px solid #d9d9d9;
-                    padding: 0 8px;
-                    font-size: 12px;
-                    background-color: #ffffff;
-                    color: #000000;
-                }
-                QComboBox::drop-down { border: none; }
-            """)
-            layout.addWidget(combo)
-            return widget
-
-        # Add the 6 Filters from the screenshot
         top_bar.addWidget(create_filter("Date From", ["2026-8-19"]))
         top_bar.addWidget(create_filter("Date To", ["2026-8-20"]))
         top_bar.addWidget(create_filter("User", ["All Users", "John Doe", "Sarah Smith"]))
@@ -87,63 +49,14 @@ class AttendanceActivity(Activity):
         main_layout.addWidget(top_bar_widget)
 
         # ==========================================
-        # 3. DATA TABLE (Attendance Summary)
+        # 3. DATA TABLE
         # ==========================================
-        table = QTableWidget()
-        table.setColumnCount(7)
-        table.setHorizontalHeaderLabels(["Date", "Employee", "Department", "Check In", "Check Out", "Total Hours", "Status"])
+        table = StandardTable(["Date", "Employee", "Department", "Check In", "Check Out", "Total Hours", "Status"])
         
-        # Ensure table can shrink
-        table.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        table.setMinimumHeight(100) 
+        # FIX 1: Reduce the minimum height so the window can shrink further
+        table.setMinimumHeight(50)
         
-        # Table Styling & Scrolling
-        table.setShowGrid(False)
-        table.setAlternatingRowColors(True)
-        table.verticalHeader().setVisible(False)
-        table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
-        table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
-        
-        # Enable Scrollbars
-        table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        table.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        
-        table.setStyleSheet("""
-            QTableWidget {
-                background-color: #ffffff;
-                alternate-background-color: #f2f2f2;
-                border: none;
-                outline: none;
-            }
-            QTableWidget::item {
-                border-bottom: 1px solid #e0e0e0;
-                padding: 8px;
-                font-size: 12px;
-                color: #000000;
-            }
-            QTableWidget::item:selected {
-                background-color: #e8f0fe;
-                color: #000000;
-            }
-            QHeaderView::section {
-                background-color: #ffffff;
-                color: #000000;
-                font-weight: bold;
-                font-size: 12px;
-                border: none;
-                border-bottom: 2px solid #d9d9d9;
-                padding: 8px;
-                text-align: left;
-            }
-        """)
-
-        # Configure columns
-        header = table.horizontalHeader()
-        header.setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
-        header.setStretchLastSection(True) 
-        header.setDefaultAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
-        
-        # Set default column widths
+        # Set specific column widths
         table.setColumnWidth(0, 100) # Date
         table.setColumnWidth(1, 150) # Employee
         table.setColumnWidth(2, 130) # Department
@@ -162,48 +75,11 @@ class AttendanceActivity(Activity):
             table.setItem(row, 5, QTableWidgetItem(total))
             table.setItem(row, 6, QTableWidgetItem(status))
 
-        main_layout.addWidget(table, 1)
+        # Table fills the available space in the vertical layout without the unsafe extra-arg call
+        main_layout.addWidget(table)
 
         # ==========================================
         # 4. PAGINATION FOOTER
         # ==========================================
-        footer_layout = QHBoxLayout()
-        footer_layout.setContentsMargins(0, 10, 0, 0)
-        
-        showing_lbl = QLabel("Showing 1-20 of 100")
-        showing_lbl.setStyleSheet("font-size: 12px; color: #878787; border: none; background: transparent;")
-        footer_layout.addWidget(showing_lbl)
-        
-        footer_layout.addStretch()
-        
-        btn_style = """
-            QPushButton {
-                background-color: #ffffff;
-                color: #000000;
-                border: 1px solid #d9d9d9;
-                font-size: 14px;
-                font-weight: bold;
-                padding-bottom: 2px;
-            }
-            QPushButton:hover {
-                background-color: #f9f9f9;
-            }
-        """
-        
-        left_btn = QPushButton("←")
-        left_btn.setFixedSize(32, 32)
-        left_btn.setStyleSheet(btn_style)
-        footer_layout.addWidget(left_btn)
-        
-        right_btn = QPushButton("→")
-        right_btn.setFixedSize(32, 32)
-        right_btn.setStyleSheet(btn_style)
-        footer_layout.addWidget(right_btn)
-
-        main_layout.addLayout(footer_layout)
-
-        # Set the content in the scroll area
-        main_scroll.setWidget(scroll_content)
-        content_layout = QVBoxLayout(self.content)
-        content_layout.setContentsMargins(0, 0, 0, 0)
-        content_layout.addWidget(main_scroll)
+        footer = PaginationFooter("Showing 1-20 of 100")
+        main_layout.addWidget(footer)

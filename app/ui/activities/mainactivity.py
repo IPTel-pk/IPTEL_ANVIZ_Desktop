@@ -67,8 +67,8 @@ class MainActivity(Activity):
         scroll_layout.setContentsMargins(0, 0, 0, 0)
         scroll_layout.setSpacing(0)
 
-        for title, subtitle, time_text in activities_data:
-            scroll_layout.addWidget(ActivityItem(title, subtitle, time_text))
+        for title, subtitle, time_text, status in activities_data:
+            scroll_layout.addWidget(ActivityItem(title, subtitle, time_text, status))
 
         scroll_layout.addStretch()
 

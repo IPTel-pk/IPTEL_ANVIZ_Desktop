@@ -2,6 +2,7 @@ from typing import Callable
 from PySide6.QtWidgets import QPushButton, QHBoxLayout
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QSize
+from app.settings import ACCENT_COLOR
 import os
 
 class AsideButton(QPushButton):
@@ -35,15 +36,15 @@ class AsideButton(QPushButton):
                 }
             """)
         else:
-            self.setStyleSheet("""
-                QPushButton {
-                    background-color: #2c3e50;
+            self.setStyleSheet(f"""
+                QPushButton {{
+                    background-color: {ACCENT_COLOR};
                     color: #ffffff;
                     border: none;
                     text-align: left;
                     padding-left: 10px;
-                }
-                QPushButton:hover {
+                }}
+                QPushButton:hover {{
                     background-color: #34495e;
-                }
+                }}
             """)

@@ -1,3 +1,4 @@
+from PySide6.QtCore import Qt
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QPushButton, QSizePolicy
@@ -10,6 +11,7 @@ class ToolbarButton(QPushButton):
         self.setIconSize(QSize(16, 16))
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         self.setFixedHeight(36)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setStyleSheet("""
             QPushButton {
                 background-color: #ffffff;
