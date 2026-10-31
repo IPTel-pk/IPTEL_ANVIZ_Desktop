@@ -1,4 +1,5 @@
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
@@ -19,32 +20,44 @@ class ActivityItem(QWidget):
         layout.setSpacing(12)
 
         # --- Status Indicator Mapping ---
-        # Dictionary maps status code to: (Background Color, Text Color, Icon)
-        status_styles = {
-            'o': ("#d4edda", "#155724", "✔"),  # Ok (Light Green / Dark Green)
-            'a': ("#cce5ff", "#004085", "+"),  # Add (Light Blue / Dark Blue)
-            'e': ("#fff3cd", "#856404", "✎"),  # Edit (Light Yellow / Dark Yellow)
-            'd': ("#f8d7da", "#721c24", "✕"),  # Delete (Light Red / Dark Red)
-            'i': ("#ffe8cc", "#d9480f", "!"),  # Info (Light Orange / Dark Orange)
+        # Dictionary maps status code to: (Background Color, Icon Path)
+        status_mapping = {
+            'o': ("#d4edda", "assets/ok.png"),      # Ok (Light Green)
+            'a': ("#cce5ff", "assets/add.png"),     # Add (Light Blue)
+            'e': ("#fff3cd", "assets/edit.png"),    # Edit (Light Yellow)
+            'd': ("#f8d7da", "assets/delete.png"),  # Delete (Light Red)
+            'i': ("#ffe8cc", "assets/info.png"),    # Info (Light Orange)
         }
         
         # Fallback to 'o' if an invalid status code is passed
-        bg_color, text_color, icon_text = status_styles.get(status, status_styles['o'])
+        bg_color, icon_path = status_mapping.get(status, status_mapping['o'])
 
-        indicator = QLabel(icon_text)
+        # 1. Create the indicator label with the background color
+        indicator = QLabel()
         indicator.setFixedSize(30, 30)
         indicator.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        # Using 15px border-radius to make a 30x30 box a perfect circle
         indicator.setStyleSheet(f"""
             QLabel {{
                 background-color: {bg_color};
-                color: {text_color};
                 border: none;
                 border-radius: 15px;
-                font-size: 16px;
-                font-weight: bold;
             }}
         """)
+
+        # 2. Load and set the specific icon based on status
+        pixmap = QPixmap(icon_path)
+        if not pixmap.isNull():
+            # Scale the image to fit inside the 30x30 circle
+            scaled_pixmap = pixmap.scaled(
+                20, 20, 
+                Qt.AspectRatioMode.KeepAspectRatio, 
+                Qt.TransformationMode.SmoothTransformation
+            )
+            indicator.setPixmap(scaled_pixmap)
+        else:
+            # Optional: Fallback text if the image fails to load
+            indicator.setText("?")
+
         layout.addWidget(indicator, alignment=Qt.AlignmentFlag.AlignVCenter)
 
         # --- Text Layout ---

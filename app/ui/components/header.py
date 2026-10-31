@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QFont
 from PySide6.QtCore import Qt
+from app.ui.components.toolbarbutton import ToolbarButton
 from app.settings import ACCENT_COLOR
 
 
@@ -58,7 +59,7 @@ class Header(QWidget):
         # --- Search Bar ---
         search_input = QLineEdit()
         search_input.setPlaceholderText("Search...")
-        search_input.setFixedHeight(32)
+        search_input.setFixedHeight(36)
         search_input.setStyleSheet(f"""
             QLineEdit {{
                 border: 1px solid #d9d9d9;
@@ -73,20 +74,7 @@ class Header(QWidget):
         """)
 
         # --- Cancel Button ---
-        cancel_btn = QPushButton("✕")
-        cancel_btn.setFixedSize(32, 32)
-        cancel_btn.setStyleSheet("""
-            QPushButton {
-                background-color: #ffffff;
-                color: #000000;
-                border: 1px solid #d9d9d9;
-                font-size: 13px;
-                font-weight: 500;
-            }
-            QPushButton:hover {
-                background-color: #f9f9f9;
-            }
-        """)
+        cancel_btn = ToolbarButton("","assets/delete.png")
 
         # Add Search Input and Cancel Button to layout
         # The '1' makes the search bar stretch to fill the space between the label and the cancel button
