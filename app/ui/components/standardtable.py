@@ -16,7 +16,7 @@ class StandardTable(QTableWidget):
         self.setHorizontalHeaderLabels(columns)
         
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.setMinimumHeight(50)
+        self.setMinimumHeight(5)
         
         # 2. Interaction Rules (No selection, read-only)
         self.setSelectionMode(QTableWidget.SelectionMode.NoSelection)

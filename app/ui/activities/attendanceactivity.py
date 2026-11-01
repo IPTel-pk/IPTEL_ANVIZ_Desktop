@@ -31,20 +31,14 @@ class AttendanceActivity(Activity):
         top_bar_widget = QWidget()
         top_bar_widget.setStyleSheet("background: transparent;")
         top_bar_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        
         top_bar = FlowLayout(top_bar_widget, margin=0, h_spacing=15, v_spacing=15)
-
-        def create_filter(label_text: str, items: list) -> SelectField:
-            field = SelectField(label_text, items)
-            field.combo_box.setMinimumWidth(130)
-            return field
-
-        top_bar.addWidget(create_filter("Date From", ["2026-8-19"]))
-        top_bar.addWidget(create_filter("Date To", ["2026-8-20"]))
-        top_bar.addWidget(create_filter("User", ["All Users", "John Doe", "Sarah Smith"]))
-        top_bar.addWidget(create_filter("Department", ["All Departments", "Operational", "Accounts", "Sales", "IT"]))
-        top_bar.addWidget(create_filter("Template", ["Monthly HR Export", "Daily Summary", "Custom"]))
-        top_bar.addWidget(create_filter("Export", ["PDF", "Excel", "CSV"]))
+        
+        top_bar.addWidget(SelectField("Date From", ["2026-8-19"]))
+        top_bar.addWidget(SelectField("Date To", ["2026-8-20"]))
+        top_bar.addWidget(SelectField("User", ["All Users", "John Doe", "Sarah Smith"]))
+        top_bar.addWidget(SelectField("Department", ["All Departments", "Operational", "Accounts", "Sales", "IT"]))
+        top_bar.addWidget(SelectField("Template", ["Monthly HR Export", "Daily Summary", "Custom"]))
+        top_bar.addWidget(SelectField("Export", ["PDF", "Excel", "CSV"]))
 
         main_layout.addWidget(top_bar_widget)
 
@@ -54,7 +48,7 @@ class AttendanceActivity(Activity):
         table = StandardTable(["Date", "Employee", "Department", "Check In", "Check Out", "Total Hours", "Status"])
         
         # FIX 1: Reduce the minimum height so the window can shrink further
-        table.setMinimumHeight(50)
+        table.setMinimumHeight(5)
         
         # Set specific column widths
         table.setColumnWidth(0, 100) # Date

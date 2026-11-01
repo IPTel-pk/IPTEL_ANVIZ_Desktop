@@ -75,7 +75,7 @@ class SearchableComboBox(QComboBox):
 
 class SelectField(QWidget):
     """Reusable custom dropdown field with a label on top."""
-    def __init__(self, text: str, items: list, default_value: str = "", parent=None):
+    def __init__(self, text: str, items: list, default_value: str = "", min_width: int = 130, parent=None):
         super().__init__(parent)
         
         layout = QVBoxLayout(self)
@@ -88,6 +88,7 @@ class SelectField(QWidget):
         
         self.combo_box = SearchableComboBox(items)
         self.combo_box.setFixedHeight(32)
+        self.combo_box.setMinimumWidth(min_width)
         
         # Handle default value (shown when not focused and empty)
         line_edit = self.combo_box.lineEdit()
@@ -100,12 +101,21 @@ class SelectField(QWidget):
         self.combo_box.setStyleSheet("""
             QComboBox {
                 border: 1px solid #d9d9d9;
-                padding: 0 8px;
+                padding: 0 30px 0 8px;
                 font-size: 12px;
                 background-color: #ffffff;
                 color: #000000;
             }
-            QComboBox::drop-down { border: none; }
+            QComboBox::drop-down {
+                border: none;
+                width: 24px;
+                background: transparent;
+            }
+            QComboBox::down-arrow {
+                image: url(assets/arrow.png);
+                width: 12px;
+                height: 12px;
+            }
         """)
         layout.addWidget(self.combo_box)
 

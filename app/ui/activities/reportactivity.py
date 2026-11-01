@@ -57,7 +57,7 @@ class ReportActivity(Activity):
         table = StandardTable(["Date", "Time", "User ID", "User Name", "Department", "Status"])
         
         # FIX: Reduce the minimum height so the window can shrink further
-        table.setMinimumHeight(50)
+        table.setMinimumHeight(5)
         
         # Set column widths
         table.setColumnWidth(0, 120) 

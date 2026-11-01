@@ -49,7 +49,7 @@ class ActivityItem(QWidget):
         if not pixmap.isNull():
             # Scale the image to fit inside the 30x30 circle
             scaled_pixmap = pixmap.scaled(
-                20, 20, 
+                10, 10, 
                 Qt.AspectRatioMode.KeepAspectRatio, 
                 Qt.TransformationMode.SmoothTransformation
             )

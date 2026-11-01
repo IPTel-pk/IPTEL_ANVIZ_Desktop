@@ -1,5 +1,5 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap, QMouseEvent
 from PySide6.QtWidgets import (
     QCheckBox,
     QHBoxLayout,
@@ -10,6 +10,10 @@ from PySide6.QtWidgets import (
     QGridLayout,
 )
 
+# Assuming you have this in your settings file
+from app.settings import ACCENT_COLOR
+
+
 class DeviceCard(QWidget):
     """Custom widget representing a single device."""
     def __init__(self, name: str, model: str, ip: str, port: str, serial: str, last_seen: str, is_online: bool, parent=None):
@@ -19,12 +23,8 @@ class DeviceCard(QWidget):
         self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         
-        self.setStyleSheet("""
-            DeviceCard {
-                background-color: #ffffff;
-                border: 1px solid #d9d9d9;
-            }
-        """)
+        # Add a pointing hand cursor to indicate the card is clickable
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
         
         layout = QVBoxLayout(self)
         layout.setContentsMargins(15, 15, 15, 15)
@@ -32,9 +32,11 @@ class DeviceCard(QWidget):
 
         # --- Top Row: Checkbox ---
         top_row = QHBoxLayout()
-        checkbox = QCheckBox()
-        checkbox.setStyleSheet("border: none; background: transparent;")
-        top_row.addWidget(checkbox)
+        self.checkbox = QCheckBox() # Stored as instance variable
+        self.checkbox.setStyleSheet("border: none; background: transparent;")
+        # Connect checkbox state to the styling function
+        self.checkbox.stateChanged.connect(self._update_card_style)
+        top_row.addWidget(self.checkbox)
         top_row.addStretch()
         layout.addLayout(top_row)
 
@@ -63,6 +65,7 @@ class DeviceCard(QWidget):
         
         status_text = QLabel("Online" if is_online else "Offline")
         status_text.setStyleSheet("font-size: 11px; color: #000000; border: none; background: transparent;")
+        status_text.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         
         status_layout.addWidget(dot)
         status_layout.addWidget(status_text)
@@ -73,12 +76,14 @@ class DeviceCard(QWidget):
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setWordWrap(True)
         title_label.setStyleSheet("font-size: 18px; font-weight: bold; color: #000000; border: none; background: transparent;")
+        title_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         layout.addWidget(title_label)
 
         subtitle_label = QLabel(model)
         subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         subtitle_label.setWordWrap(True)
         subtitle_label.setStyleSheet("font-size: 14px; color: #000000; border: none; background: transparent;")
+        subtitle_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         layout.addWidget(subtitle_label)
 
         # --- Properties Grid ---
@@ -94,12 +99,40 @@ class DeviceCard(QWidget):
         for row, (key, value) in enumerate(props):
             key_label = QLabel(key)
             key_label.setStyleSheet("font-size: 11px; font-weight: bold; color: #000000; border: none; background: transparent;")
+            key_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+            
             val_label = QLabel(value)
             val_label.setWordWrap(True)
             val_label.setStyleSheet("font-size: 11px; color: #878787; border: none; background: transparent;")
+            val_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
             
             props_layout.addWidget(key_label, row, 0, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
             props_layout.addWidget(val_label, row, 1, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
             
         props_layout.setColumnStretch(1, 1)
         layout.addLayout(props_layout)
+
+        # Initialize border styling based on default checkbox state
+        self._update_card_style()
+
+    def _update_card_style(self) -> None:
+        """Changes the card border to ACCENT_COLOR when checked."""
+        border_color = ACCENT_COLOR if self.checkbox.isChecked() else "#d9d9d9"
+        self.setStyleSheet(f"""
+            DeviceCard {{
+                background-color: #ffffff;
+                border: 1px solid {border_color};
+            }}
+        """)
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        """Toggle checkbox when clicking anywhere on the card."""
+        if event.button() == Qt.MouseButton.LeftButton:
+            # Check if the user clicked directly on the checkbox
+            child = self.childAt(event.pos())
+            
+            # If clicked on the card but NOT on the checkbox itself, toggle it manually
+            if child != self.checkbox:
+                self.checkbox.setChecked(not self.checkbox.isChecked())
+                
+        super().mousePressEvent(event)

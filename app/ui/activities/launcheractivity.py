@@ -16,6 +16,7 @@ from app.ui.components.largebutton import LargeButton
 from app.ui.components.fileitemaction import FileItemActions
 from data.launcher import files_data
 
+
 class LauncherActivity(Activity):
     """Launcher Page"""
 
@@ -69,9 +70,13 @@ class LauncherActivity(Activity):
         recent_files_layout.addWidget(header_label)
 
         # Table Setup
-        self.table = QTableWidget() # Made an instance variable for the event filter
+        self.table = QTableWidget()
         self.table.setColumnCount(3)
         self.table.setHorizontalHeaderLabels(["File Name", "Path", "Actions"])
+        
+        # Make table expand fully
+        self.table.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.table.setMinimumHeight(50) # Allows window to shrink
         
         # Table Styling
         self.table.setShowGrid(False)
@@ -121,45 +126,42 @@ class LauncherActivity(Activity):
             self.table.setCellWidget(row, 2, actions_widget)
 
         # --- Click and Cursor Logic ---
-        self.table.setMouseTracking(True) # Required for cellEntered to work without clicking
+        self.table.setMouseTracking(True)
         self.table.cellEntered.connect(self._on_cell_hover)
         self.table.cellClicked.connect(self._on_cell_clicked)
         self.table.cellDoubleClicked.connect(self._on_cell_double_clicked)
-        self.table.viewport().installEventFilter(self) # To reset cursor when leaving table
+        self.table.viewport().installEventFilter(self)
 
         recent_files_layout.addWidget(self.table)
-        main_layout.addWidget(recent_files_box)
-        main_layout.addStretch()
+        
+        # Add table box with a stretch factor of 1 so it takes all remaining space
+        main_layout.addWidget(recent_files_box, 1)
+        
+        # REMOVED: main_layout.addStretch()
 
     def _on_cell_hover(self, row: int, column: int) -> None:
-        """Change cursor to pointer for File Name (0) and Path (1) columns."""
         if column in (0, 1):
             self.table.viewport().setCursor(Qt.CursorShape.PointingHandCursor)
         else:
             self.table.viewport().setCursor(Qt.CursorShape.ArrowCursor)
 
     def _on_cell_clicked(self, row: int, column: int) -> None:
-        """Handle single-click events (Optional)."""
         if column in (0, 1):
             item = self.table.item(row, 0)
             if item is None:
                 return
             file_name = item.text()
-            # TODO: Add your logic to open the file on single click
             print(f"Clicked: {file_name}")
 
     def _on_cell_double_clicked(self, row: int, column: int) -> None:
-        """Handle double-click events (Usually used to open files)."""
         if column in (0, 1):
             item = self.table.item(row, 0)
             if item is None:
                 return
             file_name = item.text()
-            # TODO: Add your logic to open the file on double click
             print(f"Double-clicked: {file_name}")
 
     def eventFilter(self, source, event) -> bool:
-        """Reset the cursor when the mouse leaves the table viewport."""
         if source == self.table.viewport() and event.type() == QEvent.Type.Leave:
             self.table.viewport().setCursor(Qt.CursorShape.ArrowCursor)
         return super().eventFilter(source, event)

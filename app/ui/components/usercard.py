@@ -1,5 +1,5 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap, QMouseEvent
 from PySide6.QtWidgets import (
     QCheckBox,
     QHBoxLayout,
@@ -8,6 +8,10 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
+# Assuming you have this in your settings file
+from app.settings import ACCENT_COLOR
+
 
 class UserCard(QWidget):
     """Custom widget representing a single user."""
@@ -19,25 +23,21 @@ class UserCard(QWidget):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         
-        self.setStyleSheet("""
-            UserCard {
-                background-color: #ffffff;
-                border: 1px solid #d9d9d9;
-            }
-        """)
+        # Add a pointing hand cursor
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
         
         layout = QHBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(15)
+        layout.setSpacing(5)
 
         # --- Checkbox (Moved to Left) ---
-        checkbox = QCheckBox()
-        checkbox.setStyleSheet("border: none; background: transparent;")
-        layout.addWidget(checkbox, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        self.checkbox = QCheckBox() # Stored as instance variable
+        self.checkbox.setStyleSheet("border: none; background: transparent;")
+        # Connect checkbox state to the styling function
+        self.checkbox.stateChanged.connect(self._update_card_style)
+        layout.addWidget(self.checkbox, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
-        # --- Image (90% of card height) ---
-        # Card is 70px tall, 10px top margin + 10px bottom margin = 50px available. 
-        # 90% of 70 is ~63px. We'll scale it to fit nicely.
+        # --- Image ---
         icon_label = QLabel()
         pixmap = QPixmap("assets/user.png")
         if not pixmap.isNull():
@@ -57,12 +57,39 @@ class UserCard(QWidget):
 
         name_label = QLabel(name)
         name_label.setStyleSheet("font-size: 16px; font-weight: bold; color: #000000; border: none; background: transparent;")
+        name_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         
         dept_label = QLabel(department)
         dept_label.setStyleSheet("font-size: 13px; color: #878787; border: none; background: transparent;")
+        dept_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         
         text_layout.addWidget(name_label)
         text_layout.addWidget(dept_label)
         layout.addLayout(text_layout)
 
         layout.addStretch() # Pushes everything to the left
+
+        # Initialize border styling based on default checkbox state
+        self._update_card_style()
+
+    def _update_card_style(self) -> None:
+        """Changes the card border to ACCENT_COLOR when checked."""
+        border_color = ACCENT_COLOR if self.checkbox.isChecked() else "#d9d9d9"
+        self.setStyleSheet(f"""
+            UserCard {{
+                background-color: #ffffff;
+                border: 1px solid {border_color};
+            }}
+        """)
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        """Toggle checkbox when clicking anywhere on the card."""
+        if event.button() == Qt.MouseButton.LeftButton:
+            # Check if the user clicked directly on the checkbox
+            child = self.childAt(event.pos())
+            
+            # If clicked on the card but NOT on the checkbox itself, toggle it manually
+            if child != self.checkbox:
+                self.checkbox.setChecked(not self.checkbox.isChecked())
+                
+        super().mousePressEvent(event)
