@@ -8,15 +8,18 @@ from PySide6.QtWidgets import (
 
 class FileItemActions(QWidget):
     """Widget containing action buttons (folder & trash) for the table rows."""
-    def __init__(self, button_size: int = 24, button_spacing: int = 10, parent=None):
+    def __init__(
+        self, button_size: int = 24, button_spacing: int = 10, parent=None
+    ):
         super().__init__(parent)
         self.setStyleSheet("border: none; background: transparent;")
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(button_spacing)
-        layout.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-
+        layout.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
         # Folder Button
         self.btn1 = QPushButton()
         self.btn1.setIcon(QIcon("assets/folder.png"))

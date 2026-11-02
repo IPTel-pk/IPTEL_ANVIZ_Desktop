@@ -8,7 +8,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 from app.ui.components.activity import Activity
 from app.ui.components.flowlayout import FlowLayout
 from app.ui.components.toolbarbutton import ToolbarButton
@@ -18,13 +17,13 @@ from app.ui.components.paginationfooter import PaginationFooter
 from app.ui.components.inputfield import InputField
 from data.execption import data
 
-
 class ExceptionActivity(Activity):
     """**Exception Page**"""
     def __init__(self, navigate: Callable, parent=None) -> None:
         """Initialize the Exception Page Activity"""
-        super().__init__(parent=parent, activity="Exception", navigate=navigate)
-
+        super().__init__(
+            parent=parent, activity="Exception", navigate=navigate
+        )
         main_layout = self.content.layout()
         if main_layout is None:
             main_layout = QVBoxLayout(self.content)
@@ -32,35 +31,46 @@ class ExceptionActivity(Activity):
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(20)
 
-        # ==========================================
         # 1. TOP FILTER BAR
-        # ==========================================
         tool_bar_widget = QWidget()
         tool_bar_widget.setStyleSheet("background: transparent;")
-        tool_bar_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        
-        tool_bar = FlowLayout(tool_bar_widget, margin=0, h_spacing=15, v_spacing=15)
-
-        tool_bar.addWidget(SelectField("Date", ["2026-8-19"]))
-        tool_bar.addWidget(SelectField("User", ["All Users", "John Doe", "Sarah Smith"]))
-        tool_bar.addWidget(SelectField("Department", ["All Departments", "Operational", "Accounts", "Sales", "IT"]))
-
-        # Replaced create_action_btn with direct ToolbarButton instances
-        tool_bar.addWidget(ToolbarButton("Save", "assets/add.png"))
-        tool_bar.addWidget(ToolbarButton("Attendance", "assets/attendance-black.png"))
-
+        tool_bar_widget.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+        )
+        tool_bar = FlowLayout(
+            tool_bar_widget, margin=0, h_spacing=15, v_spacing=15
+        )
+        tool_bar.addWidget(SelectField(
+            "Date", ["2026-8-19"]
+        ))
+        tool_bar.addWidget(SelectField(
+            "User", ["All Users", "John Doe", "Sarah Smith"]
+        ))
+        tool_bar.addWidget(SelectField(
+            "Department", [
+                "All Departments", "Operational", "Accounts", "Sales", "IT"
+            ]
+        ))
+        tool_bar.addWidget(ToolbarButton(
+            "Save", "assets/add.png"
+        ))
+        tool_bar.addWidget(ToolbarButton(
+            "Attendance", "assets/attendance-black.png"
+        ))
         main_layout.addWidget(tool_bar_widget)
 
-        # ==========================================
         # 2. DATA TABLE
-        # ==========================================
-        table = StandardTable(["User ID", "User Name", "Department", "Status", "Check in", "Check out"])
-        
+        table = StandardTable([
+            "User ID", "User Name", "Department",
+            "Status", "Check in", "Check out"
+        ])
+
         # Ignore contents when calculating size hint
-        table.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored)
+        table.setSizeAdjustPolicy(
+            QAbstractScrollArea.SizeAdjustPolicy.AdjustIgnored
+        )
         table.setMinimumHeight(50)
         table.verticalHeader().setDefaultSectionSize(52)
-        
         table.setColumnWidth(0, 80)
         table.setColumnWidth(1, 150)
         table.setColumnWidth(2, 120)
@@ -86,18 +96,13 @@ class ExceptionActivity(Activity):
             table.setItem(row, 0, QTableWidgetItem(uid))
             table.setItem(row, 1, QTableWidgetItem(name))
             table.setItem(row, 2, QTableWidgetItem(dept))
-            
             table.setCellWidget(row, 3, create_radio_widget())
             
-            # Replaced create_input_widget with the InputField component
-            # Passed empty string "" for the label to keep it compact in the table cell
+            # Replaced create_input_widget with the InputField component passed empty string "" for the label to keep it compact in the table cell
             table.setCellWidget(row, 4, InputField(text="", placeholder=""))
             table.setCellWidget(row, 5, InputField(text="", placeholder=""))
-
         main_layout.addWidget(table)
 
-        # ==========================================
         # 3. PAGINATION FOOTER
-        # ==========================================
         footer = PaginationFooter("Showing 1-20 of 100")
         main_layout.addWidget(footer)

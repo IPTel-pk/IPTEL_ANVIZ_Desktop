@@ -9,15 +9,14 @@ from PySide6.QtWidgets import (
 from app.ui.components.activity import Activity
 from app.ui.components.activityitem import ActivityItem
 from app.ui.components.statbox import StatBox
+from app.settings import SECONDARY_COLOR
 from data.activities import activities_data
 
 class MainActivity(Activity):
     """**Main Page**"""
-
     def __init__(self, navigate: Callable, parent=None) -> None:
         """Initialize the Main Page Activity"""
         super().__init__(parent=parent, activity="Main", navigate=navigate)
-
         main_layout = QVBoxLayout(self.content)
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(30)
@@ -33,11 +32,11 @@ class MainActivity(Activity):
         recent_activities_box = QWidget()
         recent_activities_box.setObjectName("recentActivitiesBox")
         # Removed border-radius for sharp edges
-        recent_activities_box.setStyleSheet("""
-            QWidget#recentActivitiesBox {
+        recent_activities_box.setStyleSheet(f"""
+            QWidget#recentActivitiesBox {{
                 background-color: #ffffff;
-                border: 1px solid #d9d9d9;
-            }
+                border: 1px solid {SECONDARY_COLOR};
+            }}
         """)
 
         recent_activities_layout = QVBoxLayout(recent_activities_box)
@@ -46,32 +45,36 @@ class MainActivity(Activity):
 
         header_label = QLabel("Recent Activities")
         header_label.setFixedHeight(30)
-        header_label.setStyleSheet(
-            """
+        header_label.setStyleSheet(f"""
             font-size: 16px;
             font-weight: bold;
             padding-left: 15px;
-            border-bottom: 1px solid #d9d9d9;
+            border-bottom: 1px solid {SECONDARY_COLOR};
             background-color: transparent;
-            """
-        )
+        """)
         recent_activities_layout.addWidget(header_label)
 
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
-        scroll_area.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
+        scroll_area.setStyleSheet("""
+            QScrollArea {
+                border: none; background-color: transparent;
+            }
+        """)
 
         scroll_content = QWidget()
-        scroll_content.setStyleSheet("background-color: transparent; border: none;")
+        scroll_content.setStyleSheet(
+            "background-color: transparent; border: none;"
+        )
         scroll_layout = QVBoxLayout(scroll_content)
         scroll_layout.setContentsMargins(0, 0, 0, 0)
         scroll_layout.setSpacing(0)
 
         for title, subtitle, time_text, status in activities_data:
-            scroll_layout.addWidget(ActivityItem(title, subtitle, time_text, status))
-
+            scroll_layout.addWidget(ActivityItem(
+                title, subtitle, time_text, status
+            ))
         scroll_layout.addStretch()
-
         scroll_area.setWidget(scroll_content)
         recent_activities_layout.addWidget(scroll_area)
 

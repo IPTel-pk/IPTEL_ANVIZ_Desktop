@@ -3,6 +3,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QWidget,
 )
+from app.settings import ACCENT_COLOR, SECONDARY_COLOR, GRAY_TEXT_COLOR
 
 class WorkingDaysWidget(QWidget):
     """Custom widget for circular day toggle buttons."""
@@ -17,20 +18,20 @@ class WorkingDaysWidget(QWidget):
             btn = QPushButton(day)
             btn.setCheckable(True)
             btn.setFixedSize(24, 24)
-            btn.setStyleSheet("""
-                QPushButton {
+            btn.setStyleSheet(f"""
+                QPushButton {{
                     border-radius: 12px;
                     background-color: #f0f0f0;
-                    color: #878787;
-                    border: 1px solid #d9d9d9;
+                    color: {GRAY_TEXT_COLOR};
+                    border: 1px solid {SECONDARY_COLOR};
                     font-size: 11px;
                     font-weight: bold;
-                }
-                QPushButton:checked {
-                    background-color: #21679A;
+                }}
+                QPushButton:checked {{
+                    background-color: {ACCENT_COLOR};
                     color: #ffffff;
-                    border: 1px solid #21679A;
-                }
+                    border: 1px solid {ACCENT_COLOR};
+                }}
             """)
             layout.addWidget(btn)
         layout.addStretch()

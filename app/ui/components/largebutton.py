@@ -6,27 +6,28 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QVBoxLayout,
 )
+from app.settings import SECONDARY_COLOR, GRAY_TEXT_COLOR
 
 class LargeButton(QPushButton):
     """Custom button for the top section with icon, title, and subtitle."""
-
-    def __init__(self, title: str, subtitle: str, icon_path: str, parent=None):
+    def __init__(
+        self, title: str, subtitle: str, icon_path: str, parent=None
+    ):
         super().__init__(parent)
         self.setFixedHeight(130)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #ffffff;
-                border: 1px solid #d9d9d9;
-            }
-            QPushButton:hover {
-                background-color: #f9f9f9;
-            }
-            """
+        self.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
         )
-
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.setStyleSheet(f"""
+            QPushButton {{
+                background-color: #ffffff;
+                border: 1px solid {SECONDARY_COLOR};
+            }}
+            QPushButton:hover {{
+                background-color: #f9f9f9;
+            }}
+        """)
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.setSpacing(2)
@@ -46,15 +47,17 @@ class LargeButton(QPushButton):
         layout.addWidget(icon_label)
 
         title_label = QLabel(title)
-        title_label.setStyleSheet(
-            "font-size: 18px; font-weight: 500; border: none; background: transparent; color: #000000;"
-        )
+        title_label.setStyleSheet("""
+            font-size: 18px; font-weight: 500; border: none;
+            background: transparent; color: #000000;
+        """)
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title_label)
 
         sub_label = QLabel(subtitle)
-        sub_label.setStyleSheet(
-            "font-size: 10px; color: #878787; border: none; background: transparent;"
-        )
+        sub_label.setStyleSheet(f"""
+            font-size: 10px; color: {GRAY_TEXT_COLOR};
+            border: none; background: transparent;
+        """)
         sub_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(sub_label)

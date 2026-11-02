@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
 from app.ui.components.inputfield import InputField
 from app.ui.components.selectfield import SelectField
 from app.ui.components.primarybutton import PrimaryButton
+from app.settings import SECONDARY_COLOR
 
 class UserFormSidebar(QWidget):
     """Right sidebar for adding/editing a user."""
@@ -15,12 +16,11 @@ class UserFormSidebar(QWidget):
         super().__init__(parent)
         self.setFixedWidth(275)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
-
-        self.setStyleSheet("""
-            UserFormSidebar {
+        self.setStyleSheet(f"""
+            UserFormSidebar {{
                 background-color: #ffffff;
-                border: 1px solid #d9d9d9;
-            }
+                border: 1px solid {SECONDARY_COLOR};
+            }}
         """)
         
         # FIX: We need a main layout to force the scroll area to fill the widget
@@ -30,38 +30,58 @@ class UserFormSidebar(QWidget):
 
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
-        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        scroll_area.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
+        scroll_area.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
+        scroll_area.setStyleSheet("""
+            QScrollArea {
+                border: none; background-color: transparent;
+            }
+        """)
 
         content_widget = QWidget()
         content_widget.setStyleSheet("background-color: transparent;")
-        
+
         layout = QVBoxLayout(content_widget)
         layout.setContentsMargins(15, 15, 15, 15)
         layout.setSpacing(10)
 
         # Header
         title = QLabel("Add User")
-        title.setStyleSheet("font-size: 18px; font-weight: bold; border: none; background: transparent;")
+        title.setStyleSheet("""
+            font-size: 18px; font-weight: bold;
+            border: none; background: transparent;
+        """)
         layout.addWidget(title)
 
         # Form Fields
         self.id_input = InputField("ID", "Auto-generated if empty")
         layout.addWidget(self.id_input)
-        
+
         self.name_input = InputField("Name", "Enter full name")
         layout.addWidget(self.name_input)
-        
-        self.dept_combo = SelectField("Department", ["Select department", "Teachers", "Student", "Engineering", "HR"])
+
+        self.dept_combo = SelectField(
+            "Department", [
+                "Select department", "Teachers",
+                "Student", "Engineering", "HR"
+            ]
+        )
         layout.addWidget(self.dept_combo)
 
-        self.password_input = InputField("Password", "Enter password", hidden=True)
+        self.password_input = InputField(
+            "Password", "Enter password", hidden=True
+        )
         layout.addWidget(self.password_input)
 
         self.rfid_input = InputField("RFID", "Scan or enter RFID tag")
         layout.addWidget(self.rfid_input)
 
-        self.type_combo = SelectField("Type", ["Select user type", "Normal", "Admin"])
+        self.type_combo = SelectField(
+            "Type", [
+                "Select user type", "Normal", "Admin"
+            ]
+        )
         layout.addWidget(self.type_combo)
 
         layout.addStretch()

@@ -8,10 +8,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
-# Assuming you have this in your settings file
-from app.settings import ACCENT_COLOR
-
+from app.settings import ACCENT_COLOR, SECONDARY_COLOR, GRAY_TEXT_COLOR
 
 class UserCard(QWidget):
     """Custom widget representing a single user."""
@@ -20,24 +17,28 @@ class UserCard(QWidget):
         self.setFixedHeight(70)
         self.setMinimumWidth(250)
         self.setMaximumWidth(350)
-        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        self.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+        )
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
-        
-        # Add a pointing hand cursor
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         
         layout = QHBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(5)
 
-        # --- Checkbox (Moved to Left) ---
-        self.checkbox = QCheckBox() # Stored as instance variable
+        # Checkbox (Moved to Left)
+        self.checkbox = QCheckBox()
         self.checkbox.setStyleSheet("border: none; background: transparent;")
+
         # Connect checkbox state to the styling function
         self.checkbox.stateChanged.connect(self._update_card_style)
-        layout.addWidget(self.checkbox, alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        layout.addWidget(
+            self.checkbox,
+            alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft
+        )
 
-        # --- Image ---
+        # Image
         icon_label = QLabel()
         pixmap = QPixmap("assets/user.png")
         if not pixmap.isNull():
@@ -50,31 +51,43 @@ class UserCard(QWidget):
         icon_label.setStyleSheet("border: none; background: transparent;")
         layout.addWidget(icon_label)
 
-        # --- Text Labels ---
+        # Text Labels
         text_layout = QVBoxLayout()
         text_layout.setSpacing(2)
         text_layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
 
         name_label = QLabel(name)
-        name_label.setStyleSheet("font-size: 16px; font-weight: bold; color: #000000; border: none; background: transparent;")
-        name_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-        
+        name_label.setStyleSheet("""
+            font-size: 16px; font-weight: bold; color: #000000;
+            border: none; background: transparent;
+        """)
+        name_label.setTextInteractionFlags(
+            Qt.TextInteractionFlag.TextSelectableByMouse
+        )
         dept_label = QLabel(department)
-        dept_label.setStyleSheet("font-size: 13px; color: #878787; border: none; background: transparent;")
-        dept_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-        
+        dept_label.setStyleSheet(f"""
+            font-size: 13px; color: {GRAY_TEXT_COLOR};
+            border: none; background: transparent;
+        """)
+        dept_label.setTextInteractionFlags(
+            Qt.TextInteractionFlag.TextSelectableByMouse
+        )
+
         text_layout.addWidget(name_label)
         text_layout.addWidget(dept_label)
         layout.addLayout(text_layout)
 
-        layout.addStretch() # Pushes everything to the left
+        # Pushes everything to the left
+        layout.addStretch()
 
         # Initialize border styling based on default checkbox state
         self._update_card_style()
 
     def _update_card_style(self) -> None:
         """Changes the card border to ACCENT_COLOR when checked."""
-        border_color = ACCENT_COLOR if self.checkbox.isChecked() else "#d9d9d9"
+        if self.checkbox.isChecked():
+            border_color = ACCENT_COLOR
+        else: border_color = SECONDARY_COLOR
         self.setStyleSheet(f"""
             UserCard {{
                 background-color: #ffffff;
@@ -87,9 +100,9 @@ class UserCard(QWidget):
         if event.button() == Qt.MouseButton.LeftButton:
             # Check if the user clicked directly on the checkbox
             child = self.childAt(event.pos())
-            
+
             # If clicked on the card but NOT on the checkbox itself, toggle it manually
             if child != self.checkbox:
                 self.checkbox.setChecked(not self.checkbox.isChecked())
-                
+
         super().mousePressEvent(event)

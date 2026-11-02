@@ -6,10 +6,10 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 from app.ui.components.inputfield import InputField
 from app.ui.components.primarybutton import PrimaryButton
 from app.ui.components.workingdayswidget import WorkingDaysWidget
+from app.settings import SECONDARY_COLOR
 
 class DepartmentFormSidebar(QWidget):
     """Right sidebar for adding/editing a department."""
@@ -17,14 +17,13 @@ class DepartmentFormSidebar(QWidget):
         super().__init__(parent)
         self.setFixedWidth(275)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
-
-        self.setStyleSheet("""
-            DepartmentFormSidebar {
+        self.setStyleSheet(f"""
+            DepartmentFormSidebar {{
                 background-color: #ffffff;
-                border: 1px solid #d9d9d9;
-            }
+                border: 1px solid {SECONDARY_COLOR};
+            }}
         """)
-        
+
         # Main layout for the Sidebar
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
@@ -33,8 +32,14 @@ class DepartmentFormSidebar(QWidget):
         # Scroll Area
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
-        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        scroll_area.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
+        scroll_area.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
+        scroll_area.setStyleSheet("""
+            QScrollArea {
+                border: none; background-color: transparent;
+            }
+        """)
 
         # Content Widget
         content_widget = QWidget()
@@ -46,30 +51,35 @@ class DepartmentFormSidebar(QWidget):
 
         # Header
         title = QLabel("Add Department")
-        title.setStyleSheet("font-size: 18px; font-weight: bold; border: none; background: transparent;")
+        title.setStyleSheet("""
+            font-size: 18px; font-weight: bold;
+            border: none; background: transparent;
+        """)
         layout.addWidget(title)
 
-        # --- Form Fields using Custom Components ---
-        
+        # Form Fields using Custom Components
         self.name_input = InputField("Department Name", "e.g. Accounts")
         layout.addWidget(self.name_input)
         
         # Start and Off Time Row (Side-by-side)
         time_layout = QHBoxLayout()
         time_layout.setSpacing(10)
-        
+
         self.start_input = InputField("Start Time", "9:00 AM")
         self.off_input = InputField("Off Time", "5:00 PM")
-        
+
         time_layout.addWidget(self.start_input)
         time_layout.addWidget(self.off_input)
         layout.addLayout(time_layout)
 
         # Working Days
         days_lbl = QLabel("Working Days")
-        days_lbl.setStyleSheet("font-size: 12px; font-weight: bold; border: none; background: transparent;")
+        days_lbl.setStyleSheet("""
+            font-size: 12px; font-weight: bold;
+            border: none; background: transparent;
+        """)
         layout.addWidget(days_lbl)
-        
+
         self.working_days_widget = WorkingDaysWidget()
         layout.addWidget(self.working_days_widget)
         layout.addStretch()

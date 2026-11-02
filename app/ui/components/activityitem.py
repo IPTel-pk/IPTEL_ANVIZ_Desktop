@@ -7,19 +7,24 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
+from app.settings import GRAY_TEXT_COLOR
 
 class ActivityItem(QWidget):
-    def __init__(self, title: str, subtitle: str, time_text: str, status: str = 'o', parent=None):
+    def __init__(
+        self, title: str, subtitle: str, time_text: str,
+        status: str = 'o', parent=None
+    ):
         super().__init__(parent)
         self.setFixedHeight(54)
-        self.setStyleSheet("QWidget { background-color: transparent; border: none; }")
-
+        self.setStyleSheet("""
+            QWidget {
+                background-color: transparent; border: none;
+            }
+        """)
         layout = QHBoxLayout(self)
         layout.setContentsMargins(15, 6, 15, 6)
         layout.setSpacing(12)
 
-        # --- Status Indicator Mapping ---
         # Dictionary maps status code to: (Background Color, Icon Path)
         status_mapping = {
             'o': ("#d4edda", "assets/ok.png"),      # Ok (Light Green)
@@ -28,8 +33,6 @@ class ActivityItem(QWidget):
             'd': ("#f8d7da", "assets/delete.png"),  # Delete (Light Red)
             'i': ("#ffe8cc", "assets/info.png"),    # Info (Light Orange)
         }
-        
-        # Fallback to 'o' if an invalid status code is passed
         bg_color, icon_path = status_mapping.get(status, status_mapping['o'])
 
         # 1. Create the indicator label with the background color
@@ -57,29 +60,40 @@ class ActivityItem(QWidget):
         else:
             # Optional: Fallback text if the image fails to load
             indicator.setText("?")
-
         layout.addWidget(indicator, alignment=Qt.AlignmentFlag.AlignVCenter)
 
-        # --- Text Layout ---
+        # Text Layout
         text_col = QWidget()
         text_col.setStyleSheet("background: transparent; border: none;")
-        text_col.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        text_col.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+        )
         text_col_layout = QVBoxLayout(text_col)
         text_col_layout.setContentsMargins(0, 0, 0, 0)
         text_col_layout.setSpacing(0)
 
         title_label = QLabel(title)
-        title_label.setStyleSheet("font-size: 16px; color: #000000; border: none; background: transparent;")
+        title_label.setStyleSheet("""
+            font-size: 16px; color: #000000;
+            border: none; background: transparent;
+        """)
         text_col_layout.addWidget(title_label)
 
         subtitle_label = QLabel(subtitle)
-        subtitle_label.setStyleSheet("font-size: 12px; color: #878787; border: none; background: transparent;")
+        subtitle_label.setStyleSheet(f"""
+            font-size: 12px; color: {GRAY_TEXT_COLOR}; border: none;
+            background: transparent;
+        """)
         text_col_layout.addWidget(subtitle_label)
-
         layout.addWidget(text_col, 1)
 
-        # --- Time Label ---
+        # Time Label
         time_label = QLabel(time_text)
-        time_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        time_label.setStyleSheet("font-size: 12px; color: #878787; border: none; background: transparent;")
+        time_label.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
+        time_label.setStyleSheet(f"""
+            font-size: 12px; color: {GRAY_TEXT_COLOR};
+            border: none; background: transparent;
+        """)
         layout.addWidget(time_label)

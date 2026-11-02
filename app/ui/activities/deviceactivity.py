@@ -24,35 +24,31 @@ class DeviceActivity(Activity):
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(20)
 
-        # ==========================================
-        # TOP: TOOLBAR
-        # ==========================================
+        # 2. TOOLBAR
         toolbar_widget = QWidget()
         toolbar_widget.setStyleSheet("background: transparent;")
-        # FIX 1: Force the toolbar to only take the height it needs
-        toolbar_widget.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        
-        toolbar_layout = FlowLayout(toolbar_widget, margin=0, h_spacing=10, v_spacing=10)
-        
+        toolbar_widget.setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed
+        )
+        toolbar_layout = FlowLayout(
+            toolbar_widget, margin=0, h_spacing=10, v_spacing=10
+        )
         buttons = [
             ("Add", "assets/add.png"), ("Edit", "assets/edit.png"),
             ("Delete", "assets/delete.png"), ("Ping", "assets/signal.png"),
-            ("Sync Time", "assets/signal.png"), ("Download Users", "assets/download.png"),
+            ("Sync Time", "assets/signal.png"),
+            ("Download Users", "assets/download.png"),
             ("Download Logs", "assets/download.png"),
         ]
-        
         for text, icon in buttons:
             toolbar_layout.addWidget(ToolbarButton(text, icon))
-            
         main_layout.addWidget(toolbar_widget)
 
-        # ==========================================
         # BOTTOM: SPLIT LAYOUT (Cards Left, Sidebar Right)
-        # ==========================================
         content_split_layout = QHBoxLayout()
         content_split_layout.setSpacing(20)
 
-        # --- LEFT PANE: Scrollable Cards ---
+        # LEFT PANE: Scrollable Cards
         left_pane = QWidget()
         left_pane.setStyleSheet("background: transparent;")
         left_layout = QVBoxLayout(left_pane)
@@ -60,14 +56,20 @@ class DeviceActivity(Activity):
 
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
-        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        scroll_area.setStyleSheet("QScrollArea { border: none; background: transparent; }")
-        
+        scroll_area.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
+        scroll_area.setStyleSheet("""
+            QScrollArea {
+                border: none; background: transparent;
+            }
+        """)
+
         scroll_content = QWidget()
         scroll_content.setStyleSheet("background: transparent;")
-        
-        self.cards_layout = FlowLayout(scroll_content, margin=0, h_spacing=20, v_spacing=20)
-
+        self.cards_layout = FlowLayout(
+            scroll_content, margin=0, h_spacing=20, v_spacing=20
+        )
         for dev in devices:
             card = DeviceCard(*dev)
             self.cards_layout.addWidget(card)
@@ -75,12 +77,10 @@ class DeviceActivity(Activity):
         scroll_area.setWidget(scroll_content)
         left_layout.addWidget(scroll_area)
 
-        # --- RIGHT PANE: Device Form Sidebar ---
+        # RIGHT PANE: Device Form Sidebar
         right_pane = DeviceFormSidebar()
 
         # Add both panes to the split layout
-        content_split_layout.addWidget(left_pane, 1) # Left pane expands to fill space
-        content_split_layout.addWidget(right_pane)   # Right pane maintains fixed width
-
-        # FIX 2: Pass `1` as the stretch factor to the layout so it takes all extra vertical space
+        content_split_layout.addWidget(left_pane, 1)
+        content_split_layout.addWidget(right_pane)
         main_layout.addLayout(content_split_layout, 1)

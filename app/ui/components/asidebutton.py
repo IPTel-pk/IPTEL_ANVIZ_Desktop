@@ -2,7 +2,7 @@ from typing import Callable
 from PySide6.QtWidgets import QPushButton, QHBoxLayout
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QSize
-from app.settings import ACCENT_COLOR
+from app.settings import ACCENT_COLOR, ACCENT_HOVER_COLOR
 import os
 
 class AsideButton(QPushButton):
@@ -14,7 +14,7 @@ class AsideButton(QPushButton):
         self.clicked.connect(navigate)
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        
+
         # Add icon before the text
         icon_path = f"assets/{text}.png"
         if os.path.exists(icon_path):
@@ -45,6 +45,6 @@ class AsideButton(QPushButton):
                     padding-left: 10px;
                 }}
                 QPushButton:hover {{
-                    background-color: #34495e;
+                    background-color: {ACCENT_HOVER_COLOR};
                 }}
             """)

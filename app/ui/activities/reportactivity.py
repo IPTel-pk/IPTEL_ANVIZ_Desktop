@@ -5,7 +5,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
 from app.ui.components.activity import Activity
 from app.ui.components.flowlayout import FlowLayout
 from app.ui.components.toolbarbutton import ToolbarButton
@@ -14,51 +13,56 @@ from app.ui.components.standardtable import StandardTable
 from app.ui.components.paginationfooter import PaginationFooter
 from data.report import data
 
-
 class ReportActivity(Activity):
     """**Report Page**"""
     def __init__(self, navigate: Callable, parent=None) -> None:
         """Initialize the Report Page Activity"""
         super().__init__(parent=parent, activity="Report", navigate=navigate)
 
-        # 1. Safely get or create the main layout directly on self.content
-        # This removes the need for an outer QScrollArea
+        # 1. Safely get or create the main layout directly on self.content this removes the need for an outer QScrollArea
         main_layout = self.content.layout()
         if main_layout is None:
             main_layout = QVBoxLayout(self.content)
-        
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(20)
 
-        # ==========================================
         # 2. TOP FILTER BAR & ACTION BUTTONS
-        # ==========================================
         tool_bar_widget = QWidget()
         tool_bar_widget.setStyleSheet("background: transparent;")
-        tool_bar_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        
-        tool_bar = FlowLayout(tool_bar_widget, margin=0, h_spacing=15, v_spacing=15)
-
+        tool_bar_widget.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+        )
+        tool_bar = FlowLayout(
+            tool_bar_widget, margin=0, h_spacing=15, v_spacing=15
+        )
         # Add Filters using SelectField
-        tool_bar.addWidget(SelectField("Date From", ["2026-8-19"]))
-        tool_bar.addWidget(SelectField("Date To", ["2026-8-19"]))
-        tool_bar.addWidget(SelectField("User", ["All Users", "John Doe", "Sarah Smith"]))
-        tool_bar.addWidget(SelectField("Department", ["All Departments", "Operational", "Sales", "IT"]))
-
+        tool_bar.addWidget(SelectField(
+            "Date From", ["2026-8-19"]
+        ))
+        tool_bar.addWidget(SelectField(
+            "Date To", ["2026-8-19"]
+        ))
+        tool_bar.addWidget(SelectField(
+            "User", ["All Users", "John Doe", "Sarah Smith"]
+        ))
+        tool_bar.addWidget(SelectField(
+            "Department", ["All Departments", "Operational", "Sales", "IT"]
+        ))
         # Add Action Buttons directly
-        tool_bar.addWidget(ToolbarButton("Exceptions", "assets/edit.png"))
-        tool_bar.addWidget(ToolbarButton("Attendance", "assets/attendance-black.png"))
-
+        tool_bar.addWidget(ToolbarButton(
+            "Exceptions", "assets/edit.png"
+        ))
+        tool_bar.addWidget(ToolbarButton(
+            "Attendance", "assets/attendance-black.png"
+        ))
         main_layout.addWidget(tool_bar_widget)
 
-        # ==========================================
         # 3. DATA TABLE (Raw Logs)
-        # ==========================================
-        table = StandardTable(["Date", "Time", "User ID", "User Name", "Department", "Status"])
-        
-        # FIX: Reduce the minimum height so the window can shrink further
+        table = StandardTable([
+            "Date", "Time", "User ID", "User Name", "Department", "Status"
+        ])
         table.setMinimumHeight(5)
-        
+
         # Set column widths
         table.setColumnWidth(0, 120) 
         table.setColumnWidth(1, 100) 
@@ -75,12 +79,8 @@ class ReportActivity(Activity):
             table.setItem(row, 3, QTableWidgetItem(name))
             table.setItem(row, 4, QTableWidgetItem(dept))
             table.setItem(row, 5, QTableWidgetItem(status))
-
-        # Add table with a stretch factor of 1 to fill available vertical space
         main_layout.addWidget(table)
 
-        # ==========================================
         # 4. PAGINATION FOOTER
-        # ==========================================
         footer = PaginationFooter("Showing 1-20 of 100")
         main_layout.addWidget(footer)

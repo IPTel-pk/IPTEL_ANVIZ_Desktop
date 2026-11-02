@@ -4,11 +4,13 @@ from PySide6.QtWidgets import (
     QPushButton,
     QWidget,
 )
-from data.attendance import data
+from app.settings import SECONDARY_COLOR, GRAY_TEXT_COLOR
 
 class PaginationFooter(QWidget):
     """Reusable footer for pagination controls."""
-    def __init__(self, showing_text: str = "Showing 1-20 of 100", parent=None):
+    def __init__(
+        self, showing_text: str = "Showing 1-20 of 100", parent=None
+    ):
         super().__init__(parent)
         self.setStyleSheet("background: transparent;")
         layout = QHBoxLayout(self)
@@ -16,24 +18,25 @@ class PaginationFooter(QWidget):
 
         # Left label
         showing_lbl = QLabel(showing_text)
-        showing_lbl.setStyleSheet("font-size: 12px; color: #878787; border: none;")
+        showing_lbl.setStyleSheet(
+            f"font-size: 12px; color: {GRAY_TEXT_COLOR}; border: none;"
+        )
         layout.addWidget(showing_lbl)
-
         layout.addStretch()
 
         # Right buttons
-        btn_style = """
-            QPushButton {
+        btn_style = f"""
+            QPushButton {{
                 background-color: #ffffff;
                 color: #000000;
-                border: 1px solid #d9d9d9;
+                border: 1px solid {SECONDARY_COLOR};
                 font-size: 14px;
                 font-weight: bold;
                 padding-bottom: 2px;
-            }
-            QPushButton:hover {
+            }}
+            QPushButton:hover {{
                 background-color: #f9f9f9;
-            }
+            }}
         """
         left_btn = QPushButton("←")
         left_btn.setFixedSize(32, 32)
