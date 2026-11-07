@@ -6,22 +6,31 @@ from app.settings import ACCENT_COLOR, ACCENT_HOVER_COLOR
 import os
 
 class AsideButton(QPushButton):
-    """Basic Template for Buttons in the Aside Bar"""
+    """
+    ### AsideButton
+    This widget represents a single navigation item in the left sidebar and highlights the active section.
+    """
+
     def __init__(self, text:str, navigate:Callable, active:bool=False):
-        """Initializes a button for Aside Bar Menu"""
+        """
+        Initialize the sidebar action button.
+
+        This method sets up the label, icon, click callback, and active/inactive styling for a single navigation button.
+        """
         super().__init__(" "+text)
         self.setFixedHeight(50)
         self.clicked.connect(navigate)
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
 
-        # Add icon before the text
+        # 1. Add an icon before the menu text when the asset exists
         icon_path = f"assets/{text}.png"
         if os.path.exists(icon_path):
             icon = QIcon(icon_path)
             self.setIcon(icon)
             self.setIconSize(QSize(24, 24))
 
+        # 2. Apply styling for the active menu item
         if active:
             self.setStyleSheet(self.styleSheet() + """
                 QPushButton {
@@ -36,6 +45,7 @@ class AsideButton(QPushButton):
                 }
             """)
         else:
+            # 3. Apply the default sidebar button styling
             self.setStyleSheet(f"""
                 QPushButton {{
                     background-color: {ACCENT_COLOR};

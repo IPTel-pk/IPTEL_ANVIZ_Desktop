@@ -12,8 +12,17 @@ from app.ui.components.primarybutton import PrimaryButton
 from app.settings import SECONDARY_COLOR
 
 class DeviceFormSidebar(QWidget):
-    """Reduced size right sidebar for adding/editing a device."""
+    """
+    ### DeviceFormSidebar
+    This widget provides the compact form used for creating or editing device records inside the device management screen.
+    """
+
     def __init__(self, parent=None):
+        """
+        Initialize the device form sidebar.
+
+        This method creates the sidebar container, scrollable form, and all fields needed to add or modify a device.
+        """
         super().__init__(parent)
         self.setFixedWidth(275)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
@@ -23,12 +32,13 @@ class DeviceFormSidebar(QWidget):
                 border: 1px solid {SECONDARY_COLOR};
             }}
         """)
-        # Main layout for the Sidebar (holds the ScrollArea)
+
+        # 1. Create the main layout for the sidebar container
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
 
-        # Scroll Area
+        # 2. Add the scroll area so the form can grow without clipping
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
         scroll_area.setHorizontalScrollBarPolicy(
@@ -41,7 +51,7 @@ class DeviceFormSidebar(QWidget):
             }
         """)
 
-        # Content Widget (holds the form)
+        # 3. Create the inner widget holding the actual form controls
         content_widget = QWidget()
         content_widget.setStyleSheet("background-color: transparent;")
 
@@ -49,7 +59,7 @@ class DeviceFormSidebar(QWidget):
         layout.setContentsMargins(15, 15, 15, 15)
         layout.setSpacing(10)
 
-        # Header
+        # 4. Add the sidebar title
         title = QLabel("Add Device")
         title.setStyleSheet("""
             font-size: 18px; font-weight: bold;
@@ -57,7 +67,7 @@ class DeviceFormSidebar(QWidget):
         """)
         layout.addWidget(title)
 
-        # Form Fields using Custom Components
+        # 5. Add the form fields for the device details
         self.name_input = InputField("Device Name *", "e.g. Reception")
         layout.addWidget(self.name_input)
 
@@ -71,7 +81,7 @@ class DeviceFormSidebar(QWidget):
         )
         layout.addWidget(self.dept_combo)
 
-        # IP & Port Row (Side-by-side using QHBoxLayout)
+        # 6. Add the IP and port fields in one row
         ip_port_layout = QHBoxLayout()
         ip_port_layout.setSpacing(10)
 
@@ -85,27 +95,31 @@ class DeviceFormSidebar(QWidget):
         self.serial_input = InputField("Serial Number", "Enter serial number")
         layout.addWidget(self.serial_input)
 
-        # Push button to the bottom of the form content
+        # 7. Add the save button at the bottom of the form
         layout.addStretch()
-
         save_btn = PrimaryButton("Save Device")
         save_btn.clicked.connect(self._on_save_clicked)
         layout.addWidget(save_btn)
-        save_btn.clicked.connect(self._on_save_clicked)
-        layout.addWidget(save_btn)
 
-        # Finalize the Scroll Area
+        # 8. Finalize the scroll area layout
         scroll_area.setWidget(content_widget)
         main_layout.addWidget(scroll_area)
 
     def _on_save_clicked(self):
-        """Placeholder for your save logic."""
+        """
+        Save the device data from the form.
+
+        This method collects the form values and provides a place to hook validation or persistence logic later.
+        """
         device_data = self.get_data()
         print("Saving Device:", device_data)
-        # Here you would typically emit a signal or call a database function
 
     def get_data(self) -> dict:
-        """Helper method to extract all form data at once."""
+        """
+        Return the current device form values as a dictionary.
+
+        This is useful for validation, saving, or passing submitted data to a backend or database layer.
+        """
         return {
             "name": self.name_input.text(),
             "model": self.model_input.text(),

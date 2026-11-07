@@ -11,11 +11,20 @@ from PySide6.QtWidgets import (
 from app.settings import ACCENT_COLOR, SECONDARY_COLOR
 
 class DepartmentCard(QWidget):
-    """Custom widget representing a single department."""
+    """
+    ### DepartmentCard
+    This widget displays a department summary card with a checkbox, icon, and basic schedule information for selection and editing.
+    """
+
     def __init__(
         self, name: str, start_time: str, off_time: str,
         working_days: str, parent=None
     ):
+        """
+        Initialize the department card.
+
+        This method builds the card layout, adds the department name and working schedule, and hooks the checkbox to the card style update.
+        """
         super().__init__(parent)
         self.setMinimumWidth(250)
         self.setMaximumWidth(300)
@@ -25,18 +34,19 @@ class DepartmentCard(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 
+        # 1. Create the main vertical layout for the card
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(5)
 
-        # Top Row: Checkbox and Department Name
+        # 2. Build the header row with the checkbox and department name
         top_row = QHBoxLayout()
         top_row.setSpacing(5)
 
         self.checkbox = QCheckBox()
         self.checkbox.setStyleSheet("border: none; background: transparent;")
 
-        # Connect checkbox state to the styling function
+        # 3. Connect the checkbox to the style update method
         self.checkbox.stateChanged.connect(self._update_card_style)
         top_row.addWidget(self.checkbox)
 
@@ -52,11 +62,11 @@ class DepartmentCard(QWidget):
         top_row.addStretch()
         layout.addLayout(top_row)
 
-        # Bottom Row: Image and Details
+        # 4. Build the bottom area with the icon and schedule details
         bottom_row = QHBoxLayout()
         bottom_row.setSpacing(10)
 
-        # Icon Placeholder
+        # 5. Add the department icon placeholder
         icon_label = QLabel()
         pixmap = QPixmap("assets/group.png")
         if not pixmap.isNull():
@@ -69,7 +79,7 @@ class DepartmentCard(QWidget):
         icon_label.setStyleSheet("border: none; background: transparent;")
         bottom_row.addWidget(icon_label)
 
-        # Details Layout
+        # 6. Add the internal detail labels for start time, off time, and working days
         details_layout = QVBoxLayout()
         details_layout.setSpacing(2)
         details_layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
@@ -110,7 +120,11 @@ class DepartmentCard(QWidget):
         self._update_card_style()
 
     def _update_card_style(self) -> None:
-        """Changes the card border to ACCENT_COLOR when checked."""
+        """
+        Update the card border based on whether the department is selected.
+
+        A checked card uses the accent color to stand out, while an unchecked card keeps the normal secondary border.
+        """
         if self.checkbox.isChecked():
             border_color = ACCENT_COLOR
         else: border_color = SECONDARY_COLOR
@@ -122,7 +136,11 @@ class DepartmentCard(QWidget):
         """)
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
-        """Toggle checkbox when clicking anywhere on the card."""
+        """
+        Toggle the checkbox when the card itself is clicked.
+
+        This keeps the widget easy to select without requiring the user to click the tiny checkbox icon directly.
+        """
         if event.button() == Qt.MouseButton.LeftButton:
             # Check if the user clicked directly on the checkbox
             child = self.childAt(event.pos())

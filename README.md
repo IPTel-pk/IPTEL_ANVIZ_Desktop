@@ -35,7 +35,7 @@ This application is specifically designed for **ANVIZ biometric attendance machi
 
 ### Why We Built This
 
-ANVIZ machines are affordable, reliable, and widely used in schools, offices, and factories across Pakistan. However, the factory-provided software suffers from several critical issues:
+ANVIZ machines are affordable, reliable, and widely used in schools, offices, and factories across Pakistan. However, the factory-provided software (ANVIZ Crosschex) suffers from several critical issues:
 
 - 🐌 **Outdated UI/UX** – Clunky, difficult to navigate interfaces
 - 🖥️ **Windows-Only** – No support for Linux or macOS users
@@ -80,57 +80,13 @@ We built this open-source solution to address these pain points and bring a bett
 
 | Component | Technology |
 | :--- | :--- |
-| **Frontend Framework** | PyQt6 (Qt 6.x) |
+| **Frontend Framework** | PySide6 (Qt 6.x) |
 | **Backend Language** | Python 3.9+ |
-| **Database** | JSON-based `.ipatt` files |
+| **Database** | SQLite-based `.ipatt` files |
 | **Build Tools** | PyInstaller |
 | **UI Designer** | Qt Designer |
 | **Version Control** | Git / GitHub |
 | **Documentation** | Markdown |
-
----
-
-## 🗓️ Timeline
-
-### Phase 1: Foundation (Completed)
-- ✅ Project initialization and repository setup
-- ✅ Core architecture design
-- ✅ License selection (GPL v3)
-- ✅ README and documentation setup
-
-### Phase 2: MVP Development (In Progress)
-- 🚧 Launcher Page – File management
-- 🚧 Main Dashboard – Summary and overview
-- 🚧 Device Management – IP/COM configuration
-- 🚧 User Management – CRUD operations and import/export
-- 🚧 Report Page – Log viewing and filtering
-- 🚧 Attendance Page – Report generation and export
-
-### Phase 3: Advanced Features
-- ⏳ Department Management – Shifts, schedules, and calendars
-- ⏳ Exception Management – Manual attendance and leave marking
-- ⏳ Settings Page – Themes, formats, and company details
-- ⏳ Device Synchronization – Download users and logs from ANVIZ devices
-
-### Phase 4: Testing & Refinement (Q3 2026)
-- ⏳ Cross-platform testing (Windows, Linux, macOS)
-- ⏳ Performance optimization
-- ⏳ Bug fixes and stability improvements
-- ⏳ User acceptance testing (UAT)
-
-### Phase 5: Beta Release (Q4 2026)
-- ⏳ Public beta release
-- ⏳ Community feedback collection
-- ⏳ Documentation and user guides
-- ⏳ Contribution guidelines refinement
-
-### Phase 6: Future Roadmap (2027+)
-- ⏳ Payroll integration
-- ⏳ Cloud synchronization
-- ⏳ Mobile companion app
-- ⏳ Multi-language support
-- ⏳ Advanced analytics and insights
-- ⏳ Commercial paid version with additional features
 
 ---
 
@@ -262,7 +218,7 @@ For commercial use or if you require a proprietary license, please contact us at
 
 - 🌐 Website: [moeezraza.netlify.app](https://moeezraza.netlify.app)
 - 📧 Email: [moeez.raza.dev@gmail.com](mailto:moeez.raza.dev@gmail.com)
-- 📞 Phone: +92 344 5880880
+- 📞 Phone: [+92 310 3439448](https://wa.me/923103439448)
 
 ---
 
@@ -272,6 +228,17 @@ For commercial use or if you require a proprietary license, please contact us at
 - **ZKTeco** – For their contribution to the biometric industry
 - **Open Source Community** – For inspiration and support
 - **IP Tel Services Team** – For their dedication to this project
+
+---
+
+## 🤖 AI Acknowledgements
+
+This project would not have been possible without the assistance of various AI tools that accelerated development, improved code quality, and helped design the user interface. Special thanks to:
+
+- **DeepSeek:** For assisting in the overall development process, architecture planning, and component structuring.
+- **GitHub Copilot:** For real-time code completion, debugging, and fixing internal code logic.
+- **Gemini:** For generating the initial UI design concepts and layout ideas.
+- **Claude & Figma:** For collaborating on the comprehensive UI/UX design, wireframing, and component styling.
 
 ---
 

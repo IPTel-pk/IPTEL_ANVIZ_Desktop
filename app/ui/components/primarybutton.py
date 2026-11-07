@@ -2,8 +2,17 @@ from PySide6.QtWidgets import QPushButton
 from app.settings import ACCENT_COLOR, ACCENT_HOVER_COLOR
 
 class PrimaryButton(QPushButton):
-    """Reusable primary action button (e.g., Save, Submit, Export)."""
+    """
+    ### PrimaryButton
+    This widget creates the main action button used for save and submit actions across the app.
+    """
+
     def __init__(self, text: str, parent=None):
+        """
+        Initialize the primary action button.
+
+        This method styles the button with the app accent color and sets its height for consistent form actions.
+        """
         super().__init__(text, parent)
         self.setFixedHeight(36)
         self.setStyleSheet(f"""

@@ -13,13 +13,23 @@ from app.ui.components.standardtable import StandardTable
 from data.attendance import data
 
 class AttendanceActivity(Activity):
-    """**Attendance Page**"""
+    """
+    ### Attendance Activity
+    This widget displays the attendance dashboard for reviewing employee check-in and check-out records, including date filters, department filters, and export actions.
+    """
+
     def __init__(self, navigate: Callable, parent=None) -> None:
-        """Initialize the Attendance Page Activity"""
+        """
+        Initialize the attendance page activity.
+
+        This method creates the main layout, toolbar filters, attendance table, and pagination footer used on the page.
+        """
         super().__init__(
             parent=parent, activity="Attendance", navigate=navigate
         )
-        # 1. Create the main layout directly on self.content so the type is explicit for PySide6/Pylance
+
+        # 1. Main Layout
+        # This creates the vertical content layout for the attendance screen and keeps spacing consistent with the rest of the pages.
         main_layout = QVBoxLayout(self.content)
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(30)

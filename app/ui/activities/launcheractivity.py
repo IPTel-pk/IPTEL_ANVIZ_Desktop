@@ -17,16 +17,28 @@ from app.settings import SECONDARY_COLOR
 from data.launcher import files_data
 
 class LauncherActivity(Activity):
-    """Launcher Page"""
+    """
+    ### Launcher Activity
+    This widget builds the launcher screen for opening or creating files and displays a recent files table with quick actions for each item.
+    """
+
     def __init__(self, navigate: Callable, parent=None) -> None:
+        """
+        Initialize the launcher page.
+
+        This method creates the action buttons at the top and sets up the recent files table with file metadata and action controls.
+        """
         super().__init__(
             parent=parent, activity="Launcher", navigate=navigate
         )
+
+        # 1. Main Layout
+        # This sets up the vertical layout used for the launcher page and reserves space for the top action buttons and recent files panel.
         main_layout = QVBoxLayout(self.content)
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(30)
 
-        # 1. TOP BUTTONS
+        # 1. Top Buttons
         top_buttons_layout = QHBoxLayout()
         top_buttons_layout.setSpacing(30)
 
@@ -41,7 +53,7 @@ class LauncherActivity(Activity):
         top_buttons_layout.addWidget(open_btn)
         main_layout.addLayout(top_buttons_layout)
 
-        # 2. RECENT FILES TABLE
+        # 2. Recent Files table
         recent_files_box = QWidget()
         recent_files_box.setObjectName("recentFilesBox")
         recent_files_box.setStyleSheet(f"""
@@ -55,7 +67,7 @@ class LauncherActivity(Activity):
         recent_files_layout.setContentsMargins(0, 0, 0, 0)
         recent_files_layout.setSpacing(0)
 
-        # Header Label
+        # 2.1. Header Label
         header_label = QLabel("Recent Files")
         header_label.setFixedHeight(40)
         header_label.setStyleSheet(f"""
@@ -67,7 +79,7 @@ class LauncherActivity(Activity):
         """)
         recent_files_layout.addWidget(header_label)
 
-        # Table Setup
+        # 2.2 Table Setup
         self.table = QTableWidget()
         self.table.setColumnCount(3)
         self.table.setHorizontalHeaderLabels(
@@ -137,11 +149,14 @@ class LauncherActivity(Activity):
         self.table.viewport().installEventFilter(self)
 
         recent_files_layout.addWidget(self.table)
-        
-        # Add table box with a stretch factor of 1 so it takes all remaining space
         main_layout.addWidget(recent_files_box, 1)
 
     def _on_cell_hover(self, row: int, column: int) -> None:
+        """
+        Update the cursor when the mouse moves over a table cell.
+
+        File name and path cells show a pointer cursor, while action cells keep the default arrow appearance.
+        """
         if column in (0, 1):
             self.table.viewport().setCursor(
                 Qt.CursorShape.PointingHandCursor
@@ -150,6 +165,11 @@ class LauncherActivity(Activity):
             self.table.viewport().setCursor(Qt.CursorShape.ArrowCursor)
 
     def _on_cell_clicked(self, row: int, column: int) -> None:
+        """
+        Handle a single click in the recent files table.
+
+        Clicking a file name or path prints the selected file for the current interaction behavior.
+        """
         if column in (0, 1):
             item = self.table.item(row, 0)
             if item is None:
@@ -158,6 +178,11 @@ class LauncherActivity(Activity):
             print(f"Clicked: {file_name}")
 
     def _on_cell_double_clicked(self, row: int, column: int) -> None:
+        """
+        Handle a double-click on a file entry.
+
+        This method is used to trigger the open action for a selected recent file.
+        """
         if column in (0, 1):
             item = self.table.item(row, 0)
             if item is None:
@@ -166,6 +191,11 @@ class LauncherActivity(Activity):
             print(f"Double-clicked: {file_name}")
 
     def eventFilter(self, source, event) -> bool:
+        """
+        Reset the cursor when the mouse leaves the table viewport.
+
+        This keeps pointer behavior consistent for interactive cells and allows the cursor to return to its default state.
+        """
         if (source == self.table.viewport() and
             event.type() == QEvent.Type.Leave):
             self.table.viewport().setCursor(Qt.CursorShape.ArrowCursor)

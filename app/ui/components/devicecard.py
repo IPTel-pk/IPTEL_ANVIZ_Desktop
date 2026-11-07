@@ -12,11 +12,20 @@ from PySide6.QtWidgets import (
 from app.settings import ACCENT_COLOR, SECONDARY_COLOR
 
 class DeviceCard(QWidget):
-    """Custom widget representing a single device."""
+    """
+    ### DeviceCard
+    This widget shows a single device card with status, identity details, and a selectable checkbox for device management actions.
+    """
+
     def __init__(
         self, name: str, model: str, ip: str, port: str, serial: str,
         last_seen: str, is_online: bool, parent=None
     ):
+        """
+        Initialize the device summary card.
+
+        This method builds the card layout, status indicator, device identity labels, and property grid for the device details.
+        """
         super().__init__(parent)
         self.setMinimumWidth(200)
         self.setMaximumWidth(280)
@@ -25,24 +34,24 @@ class DeviceCard(QWidget):
         )
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        
+
+        # 1. Create the main card layout
         layout = QVBoxLayout(self)
         layout.setContentsMargins(15, 15, 15, 15)
         layout.setSpacing(10)
 
-        # Top Row: Checkbox
+        # 2. Add the card-level checkbox at the top
         top_row = QHBoxLayout()
-        self.checkbox = QCheckBox() # Stored as instance variable
+        self.checkbox = QCheckBox()
         self.checkbox.setStyleSheet(
             "border: none; background: transparent;"
         )
-        # Connect checkbox state to the styling function
         self.checkbox.stateChanged.connect(self._update_card_style)
         top_row.addWidget(self.checkbox)
         top_row.addStretch()
         layout.addLayout(top_row)
 
-        # Centered Icon
+        # 3. Add the device icon above the details
         icon_layout = QHBoxLayout()
         icon_label = QLabel()
         pixmap = QPixmap("assets/device.jpg")
@@ -59,7 +68,7 @@ class DeviceCard(QWidget):
         icon_layout.addStretch()
         layout.addLayout(icon_layout)
 
-        # Status Indicator
+        # 4. Add the online/offline status indicator
         status_layout = QHBoxLayout()
         status_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         status_layout.setSpacing(5)
@@ -82,7 +91,7 @@ class DeviceCard(QWidget):
         status_layout.addWidget(status_text)
         layout.addLayout(status_layout)
 
-        # Title & Subtitle
+        # 5. Add the device name and model labels
         title_label = QLabel(name)
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setWordWrap(True)
@@ -107,12 +116,12 @@ class DeviceCard(QWidget):
         )
         layout.addWidget(subtitle_label)
 
-        # Properties Grid
+        # 6. Add the property grid with device information
         props_layout = QGridLayout()
         props_layout.setContentsMargins(0, 10, 0, 0)
         props_layout.setVerticalSpacing(4)
         props = [
-            ("IP", ip), ("Port", port), 
+            ("IP", ip), ("Port", port),
             ("Serial No.", serial), ("Last Seen", last_seen)
         ]
         for row, (key, value) in enumerate(props):
@@ -146,7 +155,11 @@ class DeviceCard(QWidget):
         self._update_card_style()
 
     def _update_card_style(self) -> None:
-        """Changes the card border to ACCENT_COLOR when checked."""
+        """
+        Update the selected border color for the device card.
+
+        A checked card uses the accent border, while an unchecked card keeps the standard secondary border.
+        """
         if self.checkbox.isChecked():
             border_color = ACCENT_COLOR
         else:
@@ -159,12 +172,13 @@ class DeviceCard(QWidget):
         """)
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
-        """Toggle checkbox when clicking anywhere on the card."""
+        """
+        Toggle the selection when the card is clicked.
+
+        This keeps the device card easy to select without requiring an exact click on the tiny checkbox.
+        """
         if event.button() == Qt.MouseButton.LeftButton:
             child = self.childAt(event.pos())
-
-            # If clicked on the card but NOT
-            # On the checkbox itself, toggle it manually
             if child != self.checkbox:
                 self.checkbox.setChecked(not self.checkbox.isChecked())
 

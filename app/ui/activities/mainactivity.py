@@ -13,10 +13,21 @@ from app.settings import SECONDARY_COLOR
 from data.activities import activities_data
 
 class MainActivity(Activity):
-    """**Main Page**"""
+    """
+    ### Main Activity
+    This widget creates the dashboard landing page with summary stat boxes and a recent activity list to give a quick overview of system activity.
+    """
+
     def __init__(self, navigate: Callable, parent=None) -> None:
-        """Initialize the Main Page Activity"""
+        """
+        Initialize the Main Page Activity.
+
+        This method builds the dashboard layout including summary statistics and the recent activity panel.
+        """
         super().__init__(parent=parent, activity="Main", navigate=navigate)
+
+        # 1. Main Layout
+        # This defines the vertical dashboard layout containing the stats row and the recent activity panel.
         main_layout = QVBoxLayout(self.content)
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(30)

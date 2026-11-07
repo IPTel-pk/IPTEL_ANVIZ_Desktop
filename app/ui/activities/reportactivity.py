@@ -14,12 +14,21 @@ from app.ui.components.paginationfooter import PaginationFooter
 from data.report import data
 
 class ReportActivity(Activity):
-    """**Report Page**"""
+    """
+    ### Report Activity
+    This widget builds the report viewer where raw logs are filtered, displayed in a table format, and paginated for reviewing attendance and access activity.
+    """
+
     def __init__(self, navigate: Callable, parent=None) -> None:
-        """Initialize the Report Page Activity"""
+        """
+        Initialize the Report Page Activity.
+
+        This method builds the filter toolbar, raw activity table, and pagination footer used by the report view.
+        """
         super().__init__(parent=parent, activity="Report", navigate=navigate)
 
-        # 1. Safely get or create the main layout directly on self.content this removes the need for an outer QScrollArea
+        # 1. Main Layout
+        # This safely creates or reuses the main content layout so the report screen can hold the filter bar, table, and footer without extra wrappers.
         main_layout = self.content.layout()
         if main_layout is None:
             main_layout = QVBoxLayout(self.content)

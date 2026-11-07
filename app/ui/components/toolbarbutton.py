@@ -5,8 +5,17 @@ from PySide6.QtWidgets import QPushButton, QSizePolicy
 from app.settings import SECONDARY_COLOR, HIGHLIGHT_COLOR
 
 class ToolbarButton(QPushButton):
-    """Helper class for the top action buttons."""
+    """
+    ### ToolbarButton
+    This widget creates the small action buttons used in toolbars across the app, with an icon and compact label.
+    """
+
     def __init__(self, text: str, icon_path: str, parent=None):
+        """
+        Initialize the toolbar button.
+
+        This method adds the icon, sets the compact size, and applies the standard toolbar styling for page actions.
+        """
         super().__init__(text, parent)
         self.setIcon(QIcon(icon_path))
         self.setIconSize(QSize(16, 16))

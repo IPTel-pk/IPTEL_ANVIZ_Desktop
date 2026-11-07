@@ -15,13 +15,23 @@ from app.ui.components.selectfield import SelectField
 from app.settings import ACCENT_COLOR, SECONDARY_COLOR
 
 class SettingsActivity(Activity):
-    """**Settings Page**"""
+    """
+    ### Settings Activity
+    This widget creates the application settings screen with company details, regional preferences, system options, and action buttons for saving or resetting configuration.
+    """
+
     def __init__(self, navigate: Callable, parent=None) -> None:
-        """Initialize the Settings Page Activity"""
+        """
+        Initialize the Settings Page Activity.
+
+        This method builds the scrollable settings page, card sections, and action controls for configuration management.
+        """
         super().__init__(
             parent=parent, activity="Settings", navigate=navigate
         )
-        # Main Scroll Area (in case the screen is small)
+
+        # 1. Main Layout
+        # This sets up the scrollable settings container so the page can fit smaller screens without clipping content.
         main_scroll = QScrollArea()
         main_scroll.setWidgetResizable(True)
         main_scroll.setHorizontalScrollBarPolicy(

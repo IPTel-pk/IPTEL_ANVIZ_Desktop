@@ -18,12 +18,23 @@ from app.ui.components.inputfield import InputField
 from data.execption import data
 
 class ExceptionActivity(Activity):
-    """**Exception Page**"""
+    """
+    ### Exception Activity
+    This widget creates the exception review screen where attendance records can be validated, adjusted, and saved with user, department, and status filters.
+    """
+
     def __init__(self, navigate: Callable, parent=None) -> None:
-        """Initialize the Exception Page Activity"""
+        """
+        Initialize the exception page activity.
+
+        This method builds the filter toolbar, exception table, radio status controls, text input cells, and the final pagination section.
+        """
         super().__init__(
             parent=parent, activity="Exception", navigate=navigate
         )
+
+        # 1. Main Layout
+        # This creates or reuses the main content layout that holds the tool bar, table, and pagination footer for the exception screen.
         main_layout = self.content.layout()
         if main_layout is None:
             main_layout = QVBoxLayout(self.content)
@@ -31,7 +42,7 @@ class ExceptionActivity(Activity):
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(20)
 
-        # 1. TOP FILTER BAR
+        # 1. Tool Bar
         tool_bar_widget = QWidget()
         tool_bar_widget.setStyleSheet("background: transparent;")
         tool_bar_widget.setSizePolicy(
@@ -78,8 +89,12 @@ class ExceptionActivity(Activity):
         table.setColumnWidth(4, 120)
         table.setColumnWidth(5, 120)
 
-        # Radio widget remains as a helper since there's no reusable RadioField component yet
         def create_radio_widget() -> QWidget:
+            """
+            **Radio Buttons**
+
+            Radio widget remains as a helper since there's no reusable RadioField component yet
+            """
             w = QWidget()
             w.setStyleSheet("background: transparent;")
             layout = QHBoxLayout(w)

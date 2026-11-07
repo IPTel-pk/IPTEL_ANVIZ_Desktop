@@ -9,10 +9,19 @@ from PySide6.QtWidgets import (
 from app.settings import SECONDARY_COLOR, GRAY_TEXT_COLOR
 
 class LargeButton(QPushButton):
-    """Custom button for the top section with icon, title, and subtitle."""
+    """
+    ### LargeButton
+    This widget creates a wide action button with an icon, primary title, and smaller subtitle for launcher-style actions.
+    """
+
     def __init__(
         self, title: str, subtitle: str, icon_path: str, parent=None
     ):
+        """
+        Initialize the large action button.
+
+        This method sets the button size, adds the icon and text labels, and applies the card-like styling for launcher actions.
+        """
         super().__init__(parent)
         self.setFixedHeight(130)
         self.setSizePolicy(
@@ -28,10 +37,13 @@ class LargeButton(QPushButton):
                 background-color: #f9f9f9;
             }}
         """)
+
+        # 1. Build the main vertical layout for icon and text
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.setSpacing(2)
 
+        # 2. Add the icon to the top of the button
         icon_label = QLabel()
         pixmap = QPixmap(icon_path)
         if not pixmap.isNull():
@@ -46,6 +58,7 @@ class LargeButton(QPushButton):
         icon_label.setStyleSheet("border: none; background: transparent;")
         layout.addWidget(icon_label)
 
+        # 3. Add the main action title
         title_label = QLabel(title)
         title_label.setStyleSheet("""
             font-size: 18px; font-weight: 500; border: none;
@@ -54,6 +67,7 @@ class LargeButton(QPushButton):
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title_label)
 
+        # 4. Add the subtitle text below the title
         sub_label = QLabel(subtitle)
         sub_label.setStyleSheet(f"""
             font-size: 10px; color: {GRAY_TEXT_COLOR};

@@ -316,7 +316,9 @@ Add screenshots to demonstrate the changes.
 
 If you have any questions, feel free to reach out:
 
-- **Email:** moeez.raza.dev@gmail.com
+- 🌐 Website: [moeezraza.netlify.app](https://moeezraza.netlify.app)
+- 📧 Email: [moeez.raza.dev@gmail.com](mailto:moeez.raza.dev@gmail.com)
+- 📞 Phone: [+92 310 3439448](https://wa.me/923103439448)
 - **GitHub Issues:** [Create an issue](https://github.com/IPTel-pk/IPTEL_ANVIZ_Desktop/issues)
 
 ---

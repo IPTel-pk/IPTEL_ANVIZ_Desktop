@@ -15,11 +15,21 @@ from app.ui.components.deviceformsidebar import DeviceFormSidebar
 from data.devices import devices
 
 class DeviceActivity(Activity):
-    """**Device Page**"""
+    """
+    ### Device Activity
+    This widget displays the device management page with action buttons, a scrollable device card list, and a fixed side form for managing device details.
+    """
+
     def __init__(self, navigate: Callable, parent=None) -> None:
+        """
+        Initialize the device page activity.
+
+        This method sets up the toolbar actions, device card grid, and the right-side form sidebar used for device records.
+        """
         super().__init__(parent=parent, activity="Device", navigate=navigate)
 
-        # 1. Main layout is Vertical (Toolbar on top, Content below)
+        # 1. Main Layout
+        # This builds the main vertical layout used to stack the toolbar and the split content area for the device page.
         main_layout = QVBoxLayout(self.content)
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(20)
@@ -44,11 +54,11 @@ class DeviceActivity(Activity):
             toolbar_layout.addWidget(ToolbarButton(text, icon))
         main_layout.addWidget(toolbar_widget)
 
-        # BOTTOM: SPLIT LAYOUT (Cards Left, Sidebar Right)
+        # 3. BOTTOM: SPLIT LAYOUT (Cards Left, Sidebar Right)
         content_split_layout = QHBoxLayout()
         content_split_layout.setSpacing(20)
 
-        # LEFT PANE: Scrollable Cards
+        # 4. LEFT PANE: Scrollable Cards
         left_pane = QWidget()
         left_pane.setStyleSheet("background: transparent;")
         left_layout = QVBoxLayout(left_pane)
@@ -77,10 +87,10 @@ class DeviceActivity(Activity):
         scroll_area.setWidget(scroll_content)
         left_layout.addWidget(scroll_area)
 
-        # RIGHT PANE: Device Form Sidebar
+        # 5. RIGHT PANE: Device Form Sidebar
         right_pane = DeviceFormSidebar()
 
-        # Add both panes to the split layout
+        # 6. Add both panes to the split layout
         content_split_layout.addWidget(left_pane, 1)
         content_split_layout.addWidget(right_pane)
         main_layout.addLayout(content_split_layout, 1)

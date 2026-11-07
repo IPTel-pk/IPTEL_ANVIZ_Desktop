@@ -2,7 +2,17 @@ from PySide6.QtWidgets import QMainWindow, QMenu, QMenuBar
 from PySide6.QtGui import QAction
 
 class MenuBar:
+    """
+    ### MenuBar
+    This helper class populates the main application menu with file, edit, device, view, data, and help actions.
+    """
+
     def __init__(self, menubar: QMenuBar, parent_window: QMainWindow):
+        """
+        Initialize the top application menu bar.
+
+        This method creates each menu and attaches action callbacks for the primary application operations.
+        """
         menus = [
             # FILE MENU
             {"name": "File", "status": "File Menu", "options": [
@@ -66,11 +76,13 @@ class MenuBar:
             ]}
         ]
 
+        # 1. Create each menu in the main menu bar
         for menu in menus:
             new_menu: QMenu = menubar.addMenu('&' + menu["name"])
             if "status" in menu:
                 new_menu.setStatusTip(menu["status"])
             if "options" in menu:
+                # 2. Add each menu action and separator item
                 for option in menu["options"]:
                     if option["name"] == '-':
                         new_menu.addSeparator()

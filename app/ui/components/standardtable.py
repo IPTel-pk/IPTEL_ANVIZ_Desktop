@@ -7,12 +7,20 @@ from PySide6.QtWidgets import (
 from app.settings import SECONDARY_COLOR, HIGHLIGHT_COLOR
 
 class StandardTable(QTableWidget):
-    """A reusable QTableWidget with the standard application styling."""
-    
+    """
+    ### StandardTable
+    This widget provides the app-wide table style used for attendance, reports, and other summary screens.
+    """
+
     def __init__(self, columns: list[str], parent=None):
+        """
+        Initialize the standardized data table.
+
+        This method sets the columns, locking behavior, and styling used consistently across all report tables.
+        """
         super().__init__(parent)
 
-        # 1. Basic Setup
+        # 1. Set up the table columns and headers
         self.setColumnCount(len(columns))
         self.setHorizontalHeaderLabels(columns)
 
@@ -21,15 +29,15 @@ class StandardTable(QTableWidget):
         )
         self.setMinimumHeight(5)
 
-        # 2. Interaction Rules (No selection, read-only)
+        # 2. Prevent editing and selection for read-only display tables
         self.setSelectionMode(QTableWidget.SelectionMode.NoSelection)
         self.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
 
-        # 3. Visual Styling
+        # 3. Apply the standard visual styling
         self.setShowGrid(False)
         self.setAlternatingRowColors(True)
         self.verticalHeader().setVisible(False)
-        
+
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(
             Qt.ScrollBarPolicy.ScrollBarAsNeeded
@@ -59,10 +67,10 @@ class StandardTable(QTableWidget):
             }}
         """)
 
-        # 4. Header Configuration
+        # 4. Configure the header resizing and alignment options
         header = self.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
-        header.setStretchLastSection(True) 
+        header.setStretchLastSection(True)
         header.setDefaultAlignment(
             Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter
         )

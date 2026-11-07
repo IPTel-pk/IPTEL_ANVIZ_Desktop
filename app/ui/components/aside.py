@@ -6,9 +6,17 @@ from app.ui.components.asidebutton import AsideButton
 from app.settings import ACTIVITIES, ACCENT_COLOR
 
 class Aside(QWidget):
-    """**Aside Menu Bar**"""
+    """
+    ### Aside
+    This widget creates the left navigation menu for switching between app sections and displays the brand header at the top.
+    """
+
     def __init__(self, parent, activity:str, navigate:Callable) -> None:
-        """Initialize the Side Bar Menu of the activity"""
+        """
+        Initialize the sidebar menu.
+
+        This method creates the branding area and builds the list of navigation buttons for each activity in the app.
+        """
         super().__init__(parent)
         self.setAutoFillBackground(True)
         self.setStyleSheet(f"background-color: {ACCENT_COLOR};")
@@ -17,6 +25,7 @@ class Aside(QWidget):
         self.content_layout.setContentsMargins(0, 0, 0, 0)
         self.content_layout.setSpacing(0)
 
+        # 1. Build the branding area at the top of the sidebar
         branding_widget = QWidget(self)
         branding_widget.setStyleSheet("background-color: #ffffff;")
         branding_widget.setFixedHeight(140)
@@ -43,6 +52,7 @@ class Aside(QWidget):
         branding_layout.addWidget(logo_label)
         self.content_layout.addWidget(branding_widget)
 
+        # 2. Build the activity list in the menu area
         menu_widget = QWidget(self)
         menu_layout = QVBoxLayout(menu_widget)
         menu_layout.setContentsMargins(0, 0, 0, 0)

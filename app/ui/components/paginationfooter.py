@@ -7,16 +7,27 @@ from PySide6.QtWidgets import (
 from app.settings import SECONDARY_COLOR, GRAY_TEXT_COLOR
 
 class PaginationFooter(QWidget):
-    """Reusable footer for pagination controls."""
+    """
+    ### PaginationFooter
+    This widget shows the current item range and provides previous/next pagination controls for table-based screens.
+    """
+
     def __init__(
         self, showing_text: str = "Showing 1-20 of 100", parent=None
     ):
+        """
+        Initialize the pagination footer.
+
+        This method sets up the summary label and the next/previous buttons used to move across paged records.
+        """
         super().__init__(parent)
         self.setStyleSheet("background: transparent;")
+
+        # 1. Create the footer layout
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 10, 0, 0)
 
-        # Left label
+        # 2. Add the summary text on the left side
         showing_lbl = QLabel(showing_text)
         showing_lbl.setStyleSheet(
             f"font-size: 12px; color: {GRAY_TEXT_COLOR}; border: none;"
@@ -24,7 +35,7 @@ class PaginationFooter(QWidget):
         layout.addWidget(showing_lbl)
         layout.addStretch()
 
-        # Right buttons
+        # 3. Add the navigation buttons on the right side
         btn_style = f"""
             QPushButton {{
                 background-color: #ffffff;

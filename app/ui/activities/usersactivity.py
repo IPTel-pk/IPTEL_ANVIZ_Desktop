@@ -15,13 +15,23 @@ from app.ui.components.userformsidebar import UserFormSidebar
 from data.users import users
 
 class UsersActivity(Activity):
-    """**Users Page**"""
+    """
+    ### Users Activity
+    This widget renders the user management page with action buttons, a scrollable user card grid, and a side form for creating or editing employee profiles.
+    """
+
     def __init__(self, navigate: Callable, parent=None) -> None:
-        """Initialize the Users Page Activity"""
+        """
+        Initialize the Users Page Activity.
+
+        This method creates the toolbar, user card list, and the right-side form sidebar used to manage user information.
+        """
         super().__init__(
             parent=parent, activity="Users", navigate=navigate
         )
-        # 1. Main layout is Vertical (Toolbar on top, Content below)
+
+        # 1. Main Layout
+        # This creates the vertical structure for the users screen, placing the toolbar above the user cards and sidebar.
         main_layout = QVBoxLayout(self.content)
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(20)

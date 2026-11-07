@@ -15,13 +15,23 @@ from app.ui.components.toolbarbutton import ToolbarButton
 from data.departments import departments
 
 class DepartmentActivity(Activity):
-    """**Department Page**"""
+    """
+    ### Department Activity
+    This widget renders the department management screen with action buttons, a scrollable department card grid, and a side form for editing department details.
+    """
+
     def __init__(self, navigate: Callable, parent=None) -> None:
-        """Initialize the Department Page Activity"""
+        """
+        Initialize the department page activity.
+
+        This method builds the toolbar, the card-based department list, and the split layout containing the sidebar form.
+        """
         super().__init__(
             parent=parent, activity="Department", navigate=navigate
         )
-        # 1. Main layout is Vertical (Toolbar on top, Content below)
+
+        # 1. Main Layout
+        # This creates the vertical structure for the department screen, keeping the toolbar above the main content area.
         main_layout = QVBoxLayout(self.content)
         main_layout.setContentsMargins(0, 30, 0, 0)
         main_layout.setSpacing(20)
@@ -44,11 +54,11 @@ class DepartmentActivity(Activity):
             toolbar_layout.addWidget(ToolbarButton(text, icon))
         main_layout.addWidget(toolbar_widget)
 
-        # BOTTOM: SPLIT LAYOUT (Cards Left, Sidebar Right)
+        # 3. BOTTOM: SPLIT LAYOUT (Cards Left, Sidebar Right)
         content_split_layout = QHBoxLayout()
         content_split_layout.setSpacing(30)
 
-        # LEFT PANE: Scrollable Cards
+        # 4. LEFT PANE: Scrollable Cards
         left_pane = QWidget()
         left_pane.setStyleSheet("background: transparent;")
         left_layout = QVBoxLayout(left_pane)
@@ -76,10 +86,10 @@ class DepartmentActivity(Activity):
         scroll_area.setWidget(scroll_content)
         left_layout.addWidget(scroll_area)
 
-        # RIGHT PANE: Department Form Sidebar
+        # 5. RIGHT PANE: Department Form Sidebar
         right_pane = DepartmentFormSidebar()
 
-        # Add both panes to the split layout
+        # 6. Add both panes to the split layout
         content_split_layout.addWidget(left_pane, 1)
         content_split_layout.addWidget(right_pane)
         main_layout.addLayout(content_split_layout, 1)
